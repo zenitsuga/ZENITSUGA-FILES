@@ -1,0 +1,10 @@
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\ZWS\bin\ZenitsugaServices.asmx
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\ZWS\bin\Web.config
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\ZWS\bin\Web.Debug.config
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\ZWS\bin\Web.Release.config
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\ZWS\bin\ZenitsugaServices.asmx.cs
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\ZWS\bin\ZWS.dll
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\ZWS\bin\ZWS.pdb
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\ZWS\obj\Debug\ZWS.dll
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\ZWS\obj\Debug\ZWS.pdb
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\ZWS\obj\Debug\ZWS.csprojResolveAssemblyReference.cache

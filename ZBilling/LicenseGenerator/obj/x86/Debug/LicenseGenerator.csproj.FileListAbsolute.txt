@@ -1,0 +1,10 @@
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\LicenseGenerator\bin\Debug\LicenseGenerator.exe
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\LicenseGenerator\bin\Debug\LicenseGenerator.pdb
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\LicenseGenerator\bin\Debug\clsLic.dll
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\LicenseGenerator\bin\Debug\clsLic.pdb
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\LicenseGenerator\obj\x86\Debug\LicenseGenerator.Form1.resources
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\LicenseGenerator\obj\x86\Debug\LicenseGenerator.Properties.Resources.resources
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\LicenseGenerator\obj\x86\Debug\LicenseGenerator.csproj.GenerateResource.Cache
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\LicenseGenerator\obj\x86\Debug\LicenseGenerator.exe
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\LicenseGenerator\obj\x86\Debug\LicenseGenerator.pdb
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\LicenseGenerator\obj\x86\Debug\LicenseGenerator.csprojResolveAssemblyReference.cache

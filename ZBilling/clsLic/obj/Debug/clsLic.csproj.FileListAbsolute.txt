@@ -1,0 +1,4 @@
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\clsLic\bin\Debug\clsLic.dll
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\clsLic\bin\Debug\clsLic.pdb
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\clsLic\obj\Debug\clsLic.dll
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\clsLic\obj\Debug\clsLic.pdb

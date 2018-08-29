@@ -1,0 +1,5 @@
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\Registration\bin\Registration.dll
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\Registration\bin\Registration.pdb
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\Registration\obj\Debug\Registration.dll
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\Registration\obj\Debug\Registration.pdb
+C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\Registration\obj\Debug\Registration.csprojResolveAssemblyReference.cache

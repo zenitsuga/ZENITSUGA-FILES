@@ -1,0 +1,1 @@
+﻿<%@ WebService Language="C#" CodeBehind="ZenitsugaServices.asmx.cs" Class="ZWS.Service1" %>
