@@ -21,3 +21,6 @@ C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\ZBilling\obj\x86\Deb
 C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\ZBilling\obj\x86\Debug\ZBilling.csproj.GenerateResource.Cache
 C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\ZBilling\obj\x86\Debug\ZBilling.exe
 C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\ZBilling\obj\x86\Debug\ZBilling.pdb
+E:\ZENITSUGA FILES\ZBilling\ZBilling\bin\Debug\ZBilling.exe.config
+E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.exe
+E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.pdb

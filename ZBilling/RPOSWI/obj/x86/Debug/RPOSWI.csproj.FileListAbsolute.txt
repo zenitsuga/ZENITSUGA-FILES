@@ -1,0 +1,8 @@
+E:\ZENITSUGA FILES\ZBilling\RPOSWI\bin\Debug\RPOSWI.exe
+E:\ZENITSUGA FILES\ZBilling\RPOSWI\bin\Debug\RPOSWI.pdb
+E:\ZENITSUGA FILES\ZBilling\RPOSWI\obj\x86\Debug\RPOSWI.Form1.resources
+E:\ZENITSUGA FILES\ZBilling\RPOSWI\obj\x86\Debug\RPOSWI.Properties.Resources.resources
+E:\ZENITSUGA FILES\ZBilling\RPOSWI\obj\x86\Debug\RPOSWI.csproj.GenerateResource.Cache
+E:\ZENITSUGA FILES\ZBilling\RPOSWI\obj\x86\Debug\RPOSWI.exe
+E:\ZENITSUGA FILES\ZBilling\RPOSWI\obj\x86\Debug\RPOSWI.pdb
+E:\ZENITSUGA FILES\ZBilling\RPOSWI\obj\x86\Debug\RPOSWI.Screen.ConfigSettings.resources
