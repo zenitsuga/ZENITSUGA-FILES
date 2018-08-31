@@ -6,12 +6,16 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using RPOSWI.Classes;
 
 namespace RPOSWI.Screen
 {
     public partial class ConfigSettings : Form
     {
         public string UserActive;
+
+        clsFunction cf = new clsFunction();
+        ConfigurationSettings cs;
 
         public ConfigSettings()
         {
@@ -20,23 +24,21 @@ namespace RPOSWI.Screen
 
         private void ConfigSettings_Load(object sender, EventArgs e)
         {
-            ShowTab();
+            cs = new ConfigurationSettings();
+            cs = cf.LoadConfigSettings();
+            if (cs != null)
+            {
+                txtMachineKey.Text = cs.MachineID;
+            }
         }
 
-        private void ShowTab()
+        private void button3_Click(object sender, EventArgs e)
         {
-            try
+            using(FolderBrowserDialog ofd = new FolderBrowserDialog())
             {
-                if (string.IsNullOrEmpty(UserActive))
-                {
-                    foreach (TabPage tp in tabControl1.TabPages)
-                    {
-                        tp.
-                    }
-                }
-            }
-            catch
-            {
+                ofd.ShowNewFolderButton = true;
+                ofd.ShowDialog();
+                txtQuotationPath.Text = ofd.SelectedPath; 
             }
         }
     }

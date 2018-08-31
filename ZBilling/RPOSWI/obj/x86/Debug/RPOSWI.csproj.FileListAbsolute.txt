@@ -6,3 +6,4 @@ E:\ZENITSUGA FILES\ZBilling\RPOSWI\obj\x86\Debug\RPOSWI.csproj.GenerateResource.
 E:\ZENITSUGA FILES\ZBilling\RPOSWI\obj\x86\Debug\RPOSWI.exe
 E:\ZENITSUGA FILES\ZBilling\RPOSWI\obj\x86\Debug\RPOSWI.pdb
 E:\ZENITSUGA FILES\ZBilling\RPOSWI\obj\x86\Debug\RPOSWI.Screen.ConfigSettings.resources
+E:\ZENITSUGA FILES\ZBilling\RPOSWI\obj\x86\Debug\RPOSWI.csprojResolveAssemblyReference.cache
