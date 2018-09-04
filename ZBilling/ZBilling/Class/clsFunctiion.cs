@@ -174,6 +174,23 @@ namespace ZBilling.Class
             }
             return result;
         }
+        public string GetFieldValue(string sysID, string TableName, string FieldOutput)
+        {
+            string result = string.Empty;
+            try
+            {
+                string query = "Select " + (string.IsNullOrEmpty(FieldOutput) ? "*" : FieldOutput) + " from " + TableName + " where sysID = " + sysID;
+
+                foreach (DataRow dr in GetRecords(query).Rows)
+                {
+                    result = dr[0].ToString();
+                }
+            } 
+            catch
+            {
+            }
+            return result;
+        }
         public int GetSysID(string TableName, string Criteria)
         {
             int result = 0;
@@ -203,6 +220,21 @@ namespace ZBilling.Class
                 string Query = "Delete from " + tableName + criteria;
                 db.DBPath = DbLocation;
                 result = db.ExecuteNonQuery(Query);
+            }
+            catch
+            {
+            }
+            return result;
+        }
+
+        public string GetRecordValue(string FieldOutput, string tablename, string sysID)
+        {
+            string result = string.Empty;
+            try
+            {
+                string query = "Select " + FieldOutput + " from " + tablename + " where sysID =" + sysID;
+                DataTable dtResult = GetRecords(query);
+                result = dtResult.Rows[0][0].ToString();
             }
             catch
             {

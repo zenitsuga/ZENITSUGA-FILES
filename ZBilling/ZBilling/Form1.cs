@@ -487,5 +487,17 @@ namespace ZBilling
                 rm.Show();
             }
         }
+
+        private void roomAssignmentToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (CheckAndLoadSettings())
+            {
+                frmRoomAssignment  ra = new frmRoomAssignment();
+                ra.MdiParent = this;
+                ra.DBPath = DatabasePath;
+                ra.LoginUser = tssUserlogin.Text;
+                ra.Show();
+            }
+        }
     }
 }

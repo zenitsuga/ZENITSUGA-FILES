@@ -8,3 +8,13 @@ C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\LicenseGenerator\obj
 C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\LicenseGenerator\obj\x86\Debug\LicenseGenerator.exe
 C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\LicenseGenerator\obj\x86\Debug\LicenseGenerator.pdb
 C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\LicenseGenerator\obj\x86\Debug\LicenseGenerator.csprojResolveAssemblyReference.cache
+E:\ZENITSUGA FILES\ZBilling\LicenseGenerator\bin\Debug\LicenseGenerator.exe
+E:\ZENITSUGA FILES\ZBilling\LicenseGenerator\bin\Debug\LicenseGenerator.pdb
+E:\ZENITSUGA FILES\ZBilling\LicenseGenerator\bin\Debug\clsLic.dll
+E:\ZENITSUGA FILES\ZBilling\LicenseGenerator\bin\Debug\clsLic.pdb
+E:\ZENITSUGA FILES\ZBilling\LicenseGenerator\obj\x86\Debug\LicenseGenerator.csprojResolveAssemblyReference.cache
+E:\ZENITSUGA FILES\ZBilling\LicenseGenerator\obj\x86\Debug\LicenseGenerator.Form1.resources
+E:\ZENITSUGA FILES\ZBilling\LicenseGenerator\obj\x86\Debug\LicenseGenerator.Properties.Resources.resources
+E:\ZENITSUGA FILES\ZBilling\LicenseGenerator\obj\x86\Debug\LicenseGenerator.csproj.GenerateResource.Cache
+E:\ZENITSUGA FILES\ZBilling\LicenseGenerator\obj\x86\Debug\LicenseGenerator.exe
+E:\ZENITSUGA FILES\ZBilling\LicenseGenerator\obj\x86\Debug\LicenseGenerator.pdb

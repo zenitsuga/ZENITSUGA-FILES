@@ -5,10 +5,10 @@ C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\ProgramGrabber\obj\x
 C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\ProgramGrabber\obj\x86\Debug\ProgramGrabber.csproj.GenerateResource.Cache
 C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\ProgramGrabber\obj\x86\Debug\ProgramGrabber.exe
 C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\ProgramGrabber\obj\x86\Debug\ProgramGrabber.pdb
-E:\ZENITSUGA FILES\ZBilling\ProgramGrabber\obj\x86\Debug\ProgramGrabber.exe
-E:\ZENITSUGA FILES\ZBilling\ProgramGrabber\obj\x86\Debug\ProgramGrabber.pdb
 E:\ZENITSUGA FILES\ZBilling\ProgramGrabber\bin\Debug\ProgramGrabber.exe
 E:\ZENITSUGA FILES\ZBilling\ProgramGrabber\bin\Debug\ProgramGrabber.pdb
 E:\ZENITSUGA FILES\ZBilling\ProgramGrabber\obj\x86\Debug\ProgramGrabber.Form1.resources
 E:\ZENITSUGA FILES\ZBilling\ProgramGrabber\obj\x86\Debug\ProgramGrabber.Properties.Resources.resources
 E:\ZENITSUGA FILES\ZBilling\ProgramGrabber\obj\x86\Debug\ProgramGrabber.csproj.GenerateResource.Cache
+E:\ZENITSUGA FILES\ZBilling\ProgramGrabber\obj\x86\Debug\ProgramGrabber.exe
+E:\ZENITSUGA FILES\ZBilling\ProgramGrabber\obj\x86\Debug\ProgramGrabber.pdb

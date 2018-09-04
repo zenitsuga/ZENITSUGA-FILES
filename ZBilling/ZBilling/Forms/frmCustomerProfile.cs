@@ -17,34 +17,24 @@ namespace ZBilling.Forms
         clsFunctiion cf = new clsFunctiion();
 
         DataTable dtRooms = new DataTable();
+        DataView dvCustomer;
         
         public frmCustomerProfile()
         {
             InitializeComponent();
         }
 
-        private void LoadRoomAssignment(string CustomerID)
-        {
-            try
-            {
-                dataGridView1.DataSource = null;
-                string SQLStatement = "Select * from tblRoomAssignment where CustomerID = '" + CustomerID + "'";
-                cf.DbLocation = DBPath;
-                dataGridView1.DataSource = cf.GetRecords(SQLStatement);
-                dataGridView1.Refresh();
-            }
-            catch
-            {
-            }
-        }
+        
 
         public void LoadCustomerInfo()
         {
             try
             {
-                dataGridView1.DataSource = null;
+                //dataGridView1.DataSource = null;
                 string SQLStatement = "Select * from tblCustomerTenant where isActive = 1 order by OwnerName,TenantName asc"; cf.DbLocation = DBPath;
-                dataGridView2.DataSource = cf.GetRecords(SQLStatement);
+                DataTable dtRecords = cf.GetRecords(SQLStatement);
+                dataGridView2.DataSource = dtRecords;
+                dvCustomer = new DataView(dtRecords);
                 dataGridView2.Refresh();
             }
             catch
@@ -75,29 +65,7 @@ namespace ZBilling.Forms
             }
         }
 
-        public void SaveRoomAssignment(string CustID)
-        {
-            try
-            {
-                cf.DbLocation = DBPath;
-                int UserID = cf.GetSysID("tblUsers", " where username='" + LoginUser + "'");
-                string SQLStatement = "Insert into tblRoomAssignment(RoomNumber,CustomerID,DateTransferred,Remarks,UserID)values(" + comboBox2.Text + "," + CustID + ",'" + dateTimePicker1.Value.ToString("yyyy-MM-dd") + "','" + textBox5.Text + "',"+ UserID +")";
-                if (cf.ExecuteNonQuery(SQLStatement))
-                {
-                    MessageBox.Show("Done Room assigning.", "Room assigning", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    LoadRecords();
-                }
-                else
-                {
-                    MessageBox.Show("Error: Cannot assign room", "Room Assignment Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                LoadRoomAssignment(lblIDNumber.Text);
-            }
-            catch
-            {
-            }
-        }
+        
 
         private void LoadRecords()
         {
@@ -109,9 +77,9 @@ namespace ZBilling.Forms
                 textBox3.Text = string.Empty;
                 textBox4.Text = string.Empty;
 
-                dtRooms = dtRoomInfo();
-                comboBox1.DataSource = GetRoomType(dtRooms);
-                comboBox1.DisplayMember = "RoomType";
+                //dtRooms = dtRoomInfo();
+                //comboBox1.DataSource = GetRoomType(dtRooms);
+                //comboBox1.DisplayMember = "RoomType";
                 LoadCustomerInfo();
             }
             catch
@@ -131,63 +99,24 @@ namespace ZBilling.Forms
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (lblIDNumber.Text == "0")
-            {
-                MessageBox.Show("Error: Cannot assign room. Please save first your Customer Info.", "Customer Info not exists", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            if (comboBox1.Text == string.Empty || comboBox2.Text == string.Empty)
-            {
-                MessageBox.Show("Error: Cannot assign room. Please save first your Customer Info.", "Invalid Room Details", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            SaveRoomAssignment(lblIDNumber.Text);     
+            //if (lblIDNumber.Text == "0")
+            //{
+            //    MessageBox.Show("Error: Cannot assign room. Please save first your Customer Info.", "Customer Info not exists", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    return;
+            //}
+            //if (comboBox1.Text == string.Empty || comboBox2.Text == string.Empty)
+            //{
+            //    MessageBox.Show("Error: Cannot assign room. Please save first your Customer Info.", "Invalid Room Details", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    return;
+            //}
+            //SaveRoomAssignment(lblIDNumber.Text);     
         }
 
-        private DataTable GetRoomNumber(string Roomtype)
-        {
-            DataTable dtResult = new DataTable();
-            try
-            {
-                dtRooms = dtRoomInfo();
-                DataView dv = dtRooms.DefaultView;
-                dv.RowFilter = "RoomType='" + Roomtype + "'";
-                dtResult = dv.ToTable();
-            }
-            catch
-            {
-            }
-            return dtResult;
-        }
+        
 
-        private DataTable GetRoomType(DataTable dtRooms)
-        {
-            DataTable dtResult = new DataTable();
-            try
-            {
-                DataView dv = dtRooms.DefaultView;
-                dtResult = dv.ToTable(true, "RoomType");
-            }
-            catch
-            {
-            }
-            return dtResult;
-        }
+        
 
-        private DataTable dtRoomInfo()
-         {
-            DataTable dtResult = new DataTable();
-            try
-            {
-                cf.DbLocation = DBPath;
-                string SQLStatement = "Select * from tblRooms where isActive = 1";
-                dtResult = cf.GetRecords(SQLStatement);
-            }
-            catch
-            {
-            }
-            return dtResult;
-        }
+        
 
         private int GetCustomerID(string PrimaryKey)
         {
@@ -228,8 +157,8 @@ namespace ZBilling.Forms
 
         private void comboBox1_SelectedValueChanged(object sender, EventArgs e)
         {
-            comboBox2.DataSource = GetRoomNumber(comboBox1.Text);
-            comboBox2.DisplayMember = "RoomName";
+            //comboBox2.DataSource = GetRoomNumber(comboBox1.Text);
+            //comboBox2.DisplayMember = "RoomName";
         }
 
         private void dataGridView2_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -241,7 +170,7 @@ namespace ZBilling.Forms
                 textBox2.Text = dgr.Cells[2].Value.ToString();
                 textBox3.Text = dgr.Cells[3].Value.ToString();
                 textBox4.Text = dgr.Cells[4].Value.ToString();
-                LoadRoomAssignment(lblIDNumber.Text);
+                //LoadRoomAssignment(lblIDNumber.Text);
             }
         }
 
@@ -261,6 +190,20 @@ namespace ZBilling.Forms
             {
             }
             
+        }
+
+        private void textBox5_TextChanged(object sender, EventArgs e)
+        {
+            if (dvCustomer.ToTable().Rows.Count > 0)
+            {
+                dvCustomer.RowFilter = "OwnerName LIKE '" + textBox5.Text + "%'";
+                if (dvCustomer.ToTable().Rows.Count == 0)
+                {
+                    dvCustomer.RowFilter = "TenantName LIKE '" + textBox5.Text + "%'";
+                }
+                dataGridView2.DataSource = null;
+                dataGridView2.DataSource = dvCustomer;
+            }
         }
         
     }

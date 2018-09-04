@@ -8,3 +8,13 @@ C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\ZWS\bin\ZWS.pdb
 C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\ZWS\obj\Debug\ZWS.dll
 C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\ZWS\obj\Debug\ZWS.pdb
 C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\ZWS\obj\Debug\ZWS.csprojResolveAssemblyReference.cache
+E:\ZENITSUGA FILES\ZBilling\ZWS\bin\ZenitsugaServices.asmx
+E:\ZENITSUGA FILES\ZBilling\ZWS\bin\Web.config
+E:\ZENITSUGA FILES\ZBilling\ZWS\bin\Web.Debug.config
+E:\ZENITSUGA FILES\ZBilling\ZWS\bin\Web.Release.config
+E:\ZENITSUGA FILES\ZBilling\ZWS\bin\ZenitsugaServices.asmx.cs
+E:\ZENITSUGA FILES\ZBilling\ZWS\bin\ZWS.dll
+E:\ZENITSUGA FILES\ZBilling\ZWS\bin\ZWS.pdb
+E:\ZENITSUGA FILES\ZBilling\ZWS\obj\Debug\ZWS.csprojResolveAssemblyReference.cache
+E:\ZENITSUGA FILES\ZBilling\ZWS\obj\Debug\ZWS.dll
+E:\ZENITSUGA FILES\ZBilling\ZWS\obj\Debug\ZWS.pdb

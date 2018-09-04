@@ -3,3 +3,8 @@ C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\Registration\bin\Reg
 C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\Registration\obj\Debug\Registration.dll
 C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\Registration\obj\Debug\Registration.pdb
 C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\Registration\obj\Debug\Registration.csprojResolveAssemblyReference.cache
+E:\ZENITSUGA FILES\ZBilling\Registration\bin\Registration.dll
+E:\ZENITSUGA FILES\ZBilling\Registration\bin\Registration.pdb
+E:\ZENITSUGA FILES\ZBilling\Registration\obj\Debug\Registration.csprojResolveAssemblyReference.cache
+E:\ZENITSUGA FILES\ZBilling\Registration\obj\Debug\Registration.dll
+E:\ZENITSUGA FILES\ZBilling\Registration\obj\Debug\Registration.pdb
