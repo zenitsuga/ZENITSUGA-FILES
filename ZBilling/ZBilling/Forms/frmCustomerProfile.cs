@@ -31,7 +31,7 @@ namespace ZBilling.Forms
             try
             {
                 //dataGridView1.DataSource = null;
-                string SQLStatement = "Select * from tblCustomerTenant where isActive = 1 order by OwnerName,TenantName asc"; cf.DbLocation = DBPath;
+                string SQLStatement = "Select * from tblCustomerTenant where isActive = 1 order by LastName,FirstName asc"; cf.DbLocation = DBPath;
                 DataTable dtRecords = cf.GetRecords(SQLStatement);
                 dataGridView2.DataSource = dtRecords;
                 dvCustomer = new DataView(dtRecords);
@@ -48,8 +48,16 @@ namespace ZBilling.Forms
             {
                 cf.DbLocation = DBPath;
                 int UserID = cf.GetSysID("tblUsers", " where username='" + LoginUser + "'");
-                string SQLStatement = "Insert into tblCustomerTenant (OwnerName,TenantName,Address,ContactNumber,isActive,PrimaryKey,UserID)values('" + textBox1.Text + "','" + textBox2.Text + "','" + textBox3.Text + "','" +textBox4.Text + "'," + (checkBox1.Checked == true ? 1:0) + ",'" +textBox1.Text + "_" +textBox2.Text + "',"+ UserID +")";
+                string SQLStatement = string.Empty;
 
+                if (lblIDNumber.Text == "0")
+                {
+                    SQLStatement = "Insert into tblCustomerTenant (LastName,FirstName,MiddleName,Address,ContactNumber,isActive,PrimaryKey,UserID)values('" + textBox1.Text + "','" + textBox2.Text + "','" + textBox4.Text + "','" + textBox3.Text + "','" + textBox6.Text + "'," + (checkBox1.Checked == true ? 1 : 0) + ",'" + textBox1.Text + "_" + textBox2.Text + "_" + textBox4.Text + "'," + UserID + ")";
+                }
+                else
+                {
+                    SQLStatement = "update tblCustomerTenant set LastName='" + textBox1.Text + "',FirstName='" + textBox2.Text + "',MiddleName='" + textBox4.Text + "',Address='" + textBox3.Text + "',ContactNumber='" + textBox6.Text + "',isActive="+ (checkBox1.Checked == true ? 1 : 0) + ",PrimaryKey='" + textBox1.Text + "_" + textBox2.Text + "_" + textBox4.Text + "',UserID=" +UserID+ " where sysID=" + lblIDNumber.Text;
+                }
                 if (cf.ExecuteNonQuery(SQLStatement))
                 {
                     MessageBox.Show("Done Customer saving.", "Customer Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -203,6 +211,20 @@ namespace ZBilling.Forms
                 }
                 dataGridView2.DataSource = null;
                 dataGridView2.DataSource = dvCustomer;
+            }
+        }
+
+        private void textBox6_TextChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void textBox6_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsNumber(e.KeyChar))
+            {
+                MessageBox.Show("Please enter a numeric value.", "Allow numbers only", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                textBox6.Text = string.Empty;
             }
         }
         

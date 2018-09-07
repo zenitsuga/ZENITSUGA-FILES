@@ -70,9 +70,9 @@
             this.customerProfileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chartOfAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.roomsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.roomAssignmentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.tmrToday = new System.Windows.Forms.Timer(this.components);
-            this.roomAssignmentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -397,7 +397,7 @@
             this.customerProfileToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("customerProfileToolStripMenuItem.Image")));
             this.customerProfileToolStripMenuItem.Name = "customerProfileToolStripMenuItem";
             this.customerProfileToolStripMenuItem.Size = new System.Drawing.Size(206, 56);
-            this.customerProfileToolStripMenuItem.Text = "&Customer Profile";
+            this.customerProfileToolStripMenuItem.Text = "&Owner Profile";
             this.customerProfileToolStripMenuItem.Click += new System.EventHandler(this.customerProfileToolStripMenuItem_Click);
             // 
             // chartOfAccountToolStripMenuItem
@@ -416,6 +416,14 @@
             this.roomsToolStripMenuItem.Text = "Rooms";
             this.roomsToolStripMenuItem.Click += new System.EventHandler(this.roomsToolStripMenuItem_Click);
             // 
+            // roomAssignmentToolStripMenuItem
+            // 
+            this.roomAssignmentToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("roomAssignmentToolStripMenuItem.Image")));
+            this.roomAssignmentToolStripMenuItem.Name = "roomAssignmentToolStripMenuItem";
+            this.roomAssignmentToolStripMenuItem.Size = new System.Drawing.Size(206, 56);
+            this.roomAssignmentToolStripMenuItem.Text = "Room Assignment";
+            this.roomAssignmentToolStripMenuItem.Click += new System.EventHandler(this.roomAssignmentToolStripMenuItem_Click);
+            // 
             // toolStripButton3
             // 
             this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
@@ -432,14 +440,6 @@
             // 
             this.tmrToday.Enabled = true;
             this.tmrToday.Tick += new System.EventHandler(this.tmrToday_Tick);
-            // 
-            // roomAssignmentToolStripMenuItem
-            // 
-            this.roomAssignmentToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("roomAssignmentToolStripMenuItem.Image")));
-            this.roomAssignmentToolStripMenuItem.Name = "roomAssignmentToolStripMenuItem";
-            this.roomAssignmentToolStripMenuItem.Size = new System.Drawing.Size(206, 56);
-            this.roomAssignmentToolStripMenuItem.Text = "Room Assignment";
-            this.roomAssignmentToolStripMenuItem.Click += new System.EventHandler(this.roomAssignmentToolStripMenuItem_Click);
             // 
             // Form1
             // 

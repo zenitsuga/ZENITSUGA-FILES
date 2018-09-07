@@ -45,3 +45,4 @@ E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.Properties.Resources
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.csproj.GenerateResource.Cache
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.exe
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.pdb
+E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.csprojResolveAssemblyReference.cache
