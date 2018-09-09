@@ -25,11 +25,12 @@ namespace ZBilling.Forms
 
         private void searchRecordsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            radioButton1.Select();
             SearchRecord sr = new SearchRecord();
             sr.DBPath = DBPath;
             sr.TableName = "tblCustomerTenant";
             sr.Criteria = " where isActive = 1";
-            sr.FieldOutput = "sysid,OwnerName,TenantName,Address,ContactNumber";
+            sr.FieldOutput = "sysid,Lastname,Firstname,middlename,Address,ContactNumber,(Lastname + ',' + Firstname + ' ' + middlename) as TagOutput";
             sr.ShowDialog();
             if (sr.Result != null)
             {
@@ -44,7 +45,9 @@ namespace ZBilling.Forms
 
         private void frmRoomAssignment_Load(object sender, EventArgs e)
         {
-            LoadRoomAssignment(string.Empty);
+            string CustType = string.Empty;
+            //CustType = radioButton1.Checked ? "Owner" : "Tenant";
+            LoadRoomAssignment(CustType);
         }
 
         private void groupBox2_Enter(object sender, EventArgs e)
@@ -97,8 +100,17 @@ namespace ZBilling.Forms
         {
             try
             {
+                string filterID = radioButton1.Checked ? "c.sysid" : "t.sysid";
+                filterID = radioButton2.Checked ? "t.sysid" : "c.sysid";
                 dataGridView1.DataSource = null;
-                string SQLStatement = "SELECT r.RoomNumber,c.OwnerName,c.TenantName, r.dateTransferred from tblRoomAssignment r left join tblCustomerTenant c on r.CustomerID = c.sysid where r.isActive = 1" +  (string.IsNullOrEmpty(SysID) ? "":" and c.sysid="+SysID);
+                string SQLStatement =" SELECT r.RoomNumber, " +
+                                     "(isnull(c.LastName,'') + ',' + isnull(c.FirstName,'')) as OwnerName, " +
+                                     "(isnull(t.LastName,'') + ',' + isnull(t.FirstName,'')) as TenantName,  " +
+                                     "r.dateTransferred " +
+                                     "from tblRoomAssignment r " + 
+                                     "left join tblCustomerTenant c on r.CustomerID = c.sysid " + 
+                                     "left join tblTenant t on r.TenantID = t.sysid " +
+                                     "where r.isActive = 1 " +  (string.IsNullOrEmpty(SysID) ? "":" and " + filterID + "=" +SysID);
                 cf.DbLocation = DBPath;
                 DataTable dtResult = cf.GetRecords(SQLStatement);
                 dataGridView1.DataSource = dtResult;
@@ -122,7 +134,9 @@ namespace ZBilling.Forms
             {
                 cf.DbLocation = DBPath;
                 int UserID = cf.GetSysID("tblUsers", " where username='" + LoginUser + "'");
-                string SQLStatement = "Insert into tblRoomAssignment(RoomNumber,CustomerID,DateTransferred,Remarks,UserID)values(" + comboBox2.Text + "," + CustID + ",'" + dateTimePicker1.Value.ToString("yyyy-MM-dd") + "','" + textBox5.Text + "'," + UserID + ")";
+                string IDType = radioButton1.Checked ? "CustomerID" : "TenantID";
+                IDType = radioButton2.Checked ? "TenantID" : "CustomerID";
+                string SQLStatement = "Insert into tblRoomAssignment(RoomNumber,"+ IDType +",DateTransferred,Remarks,UserID)values(" + comboBox2.Text + "," + CustID + ",'" + dateTimePicker1.Value.ToString("yyyy-MM-dd") + "','" + textBox5.Text + "'," + UserID + ")";
                 if (cf.ExecuteNonQuery(SQLStatement))
                 {
                     MessageBox.Show("Done Room assigning.", "Room assigning", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -165,6 +179,10 @@ namespace ZBilling.Forms
                 dataGridView1.DataSource = null;
                 dataGridView1.DataSource = dvResult;
                 dataGridView1.Refresh();
+                if (dataGridView1.Rows.Count == 0)
+                {
+                    LoadRoomAssignment(string.Empty);
+                }
             }
             catch
             {
@@ -217,6 +235,111 @@ namespace ZBilling.Forms
             try
             {
                 LoadRoomAssignment(textBox2.Text);
+            }
+            catch
+            {
+            }
+        }
+
+        private void tenantRecordsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            radioButton2.Select();
+            SearchRecord sr = new SearchRecord();
+            sr.DBPath = DBPath;
+            sr.TableName = "tblTenant";
+            sr.Criteria = " where isActive = 1";
+            sr.FieldOutput = "sysid,Lastname,Firstname,middlename,Address,ContactNumber,(Lastname + ',' + Firstname + ' ' + middlename) as TagOutput";
+            sr.ShowDialog();
+            if (sr.Result != null)
+            {
+                TextBox tb = (TextBox)sr.Result;
+                string sysID = tb.Text;
+                textBox1.Text = tb.Tag.ToString();
+                textBox2.Text = sysID;
+                LoadRoomAssignment(sysID);
+                comboBox1.Focus();
+            }
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton1.Checked)
+            {
+                radioButton1.Select();
+                SearchRecord sr = new SearchRecord();
+                sr.DBPath = DBPath;
+                sr.TableName = "tblCustomerTenant";
+                sr.Criteria = " where isActive = 1";
+                sr.FieldOutput = "sysid,Lastname,Firstname,middlename,Address,ContactNumber,(Lastname + ',' + Firstname + ' ' + middlename) as TagOutput";
+                sr.ShowDialog();
+                if (sr.Result != null)
+                {
+                    TextBox tb = (TextBox)sr.Result;
+                    string sysID = tb.Text;
+                    textBox1.Text = tb.Tag.ToString();
+                    textBox2.Text = sysID;
+                    LoadRoomAssignment(sysID);
+                    comboBox1.Focus();
+                }
+            }
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton2.Checked)
+            {
+                radioButton2.Select();
+                SearchRecord sr = new SearchRecord();
+                sr.DBPath = DBPath;
+                sr.TableName = "tblTenant";
+                sr.Criteria = " where isActive = 1";
+                sr.FieldOutput = "sysid,Lastname,Firstname,middlename,Address,ContactNumber,(Lastname + ',' + Firstname + ' ' + middlename) as TagOutput";
+                sr.ShowDialog();
+                if (sr.Result != null)
+                {
+                    TextBox tb = (TextBox)sr.Result;
+                    string sysID = tb.Text;
+                    textBox1.Text = tb.Tag.ToString();
+                    textBox2.Text = sysID;
+                    LoadRoomAssignment(sysID);
+                    comboBox1.Focus();
+                }
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            LoadRoomAssignment(String.Empty);
+        }
+
+        private void dataGridView1_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            switch (e.Button)
+            {
+                case MouseButtons.Right:
+                    {
+                        var relativeMousePosition = dataGridView1.PointToClient(Cursor.Position);
+                        contextMenuStrip1.Show(dataGridView1, relativeMousePosition);
+                    }
+                    break;
+            }
+        }
+
+        private void cToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RemoveRoomAssignment( dataGridView1["RoomNumber",dataGridView1.CurrentCell.RowIndex].Value.ToString());
+        }
+        private void RemoveRoomAssignment(string sysID)
+        {
+            try
+            {
+                DialogResult dr = MessageBox.Show("Are you sure you want to removed Room Number " + sysID + "?", "Remove Assigned Room", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dr == DialogResult.Yes)
+                {
+                    string Query = "Delete from tblRoomAssignment where RoomNumber=" + sysID;
+                    cf.ExecuteNonQuery(Query);
+                }
+                button1.PerformClick();
             }
             catch
             {

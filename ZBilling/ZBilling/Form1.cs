@@ -499,5 +499,17 @@ namespace ZBilling
                 ra.Show();
             }
         }
+
+        private void tenantProfileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (CheckAndLoadSettings())
+            {
+                frmTenantProfile cp = new frmTenantProfile();
+                cp.MdiParent = this;
+                cp.DBPath = DatabasePath;
+                cp.LoginUser = tssUserlogin.Text;
+                cp.Show();
+            }
+        }
     }
 }

@@ -18,18 +18,26 @@ namespace ZBilling.Forms
 
         DataTable dtRooms = new DataTable();
         DataView dvCustomer;
+
+        DataTable dtRecords = new DataTable();
+        DataView dvRecords;
         
         public frmCustomerProfile()
         {
             InitializeComponent();
         }
 
-        
+
+        private void clearEntry()
+        {
+            textBox1.Text = textBox2.Text = textBox3.Text = textBox4.Text = textBox5.Text = textBox6.Text = string.Empty;
+        }
 
         public void LoadCustomerInfo()
         {
             try
             {
+                clearEntry();
                 //dataGridView1.DataSource = null;
                 string SQLStatement = "Select * from tblCustomerTenant where isActive = 1 order by LastName,FirstName asc"; cf.DbLocation = DBPath;
                 DataTable dtRecords = cf.GetRecords(SQLStatement);
@@ -60,11 +68,11 @@ namespace ZBilling.Forms
                 }
                 if (cf.ExecuteNonQuery(SQLStatement))
                 {
-                    MessageBox.Show("Done Customer saving.", "Customer Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Done Customer saving.", "Customer(Owner) Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
-                    MessageBox.Show("Error: Cannot save customer Info.", "Customer Saving Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Error: Cannot save customer Info.", "Customer(Owner) Saving Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 LoadCustomerInfo();
             }
@@ -120,12 +128,6 @@ namespace ZBilling.Forms
             //SaveRoomAssignment(lblIDNumber.Text);     
         }
 
-        
-
-        
-
-        
-
         private int GetCustomerID(string PrimaryKey)
         {
             int result = 0;
@@ -176,8 +178,9 @@ namespace ZBilling.Forms
                 lblIDNumber.Text = dgr.Cells[0].Value.ToString();
                 textBox1.Text = dgr.Cells[1].Value.ToString();
                 textBox2.Text = dgr.Cells[2].Value.ToString();
-                textBox3.Text = dgr.Cells[3].Value.ToString();
-                textBox4.Text = dgr.Cells[4].Value.ToString();
+                textBox4.Text = dgr.Cells[3].Value.ToString();
+                textBox3.Text = dgr.Cells[4].Value.ToString();
+                textBox6.Text = dgr.Cells[5].Value.ToString();
                 //LoadRoomAssignment(lblIDNumber.Text);
             }
         }
@@ -204,10 +207,14 @@ namespace ZBilling.Forms
         {
             if (dvCustomer.ToTable().Rows.Count > 0)
             {
-                dvCustomer.RowFilter = "OwnerName LIKE '" + textBox5.Text + "%'";
+                dvCustomer.RowFilter = "LastName LIKE '" + textBox5.Text + "%'";
                 if (dvCustomer.ToTable().Rows.Count == 0)
                 {
-                    dvCustomer.RowFilter = "TenantName LIKE '" + textBox5.Text + "%'";
+                    dvCustomer.RowFilter = "FirstName LIKE '" + textBox5.Text + "%'";
+                    if (dvCustomer.ToTable().Rows.Count == 0)
+                    {
+                        dvCustomer.RowFilter = "MiddleName LIKE '" + textBox5.Text + "%'";
+                    }
                 }
                 dataGridView2.DataSource = null;
                 dataGridView2.DataSource = dvCustomer;
@@ -227,6 +234,94 @@ namespace ZBilling.Forms
                 textBox6.Text = string.Empty;
             }
         }
-        
+
+        private void textBox7_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                dvRecords.RowFilter = comboBox1.Text + " LiKE '" + textBox7.Text + "%'";
+                //string criteria = (!string.IsNullOrEmpty(comboBox1.Text) || !string.IsNullOrEmpty(comboBox1.Text)) ? comboBox1.Text + " LIKE '" + textBox7.Text + "%' and " : string.Empty;
+                //string Query = "Select (Case when OwnerID is NULL then FALSE else TRUE end) as HasOwner,LastName,FirstName,MiddleName,Address,ContactNumber from tblTenant" + criteria + " OwnerID = " + lblIDNumber.Text;
+                //DataTable dtResult = cf.GetRecords(Query);
+                dataGridView1.DataSource = null;
+                dataGridView1.DataSource = dvRecords.ToTable();
+                dataGridView1.Refresh();
+
+                if (dataGridView1.Rows.Count == 0)
+                {
+                    LoadTenant(lblIDNumber.Text);
+                }
+            }catch  
+            {
+
+            }
+            
+        }
+
+        private void lblIDNumber_TextChanged(object sender, EventArgs e)
+        {
+            LoadTenant(lblIDNumber.Text);
+        }
+        private void LoadTenant(string SysID)
+        {
+            try
+            {
+                string Query = "SELECT * FROM tblTenant where OwnerID = " + SysID + " order by lastname asc";
+                dtRecords = cf.GetRecords(Query);
+                dataGridView1.DataSource = null;
+                dataGridView1.DataSource = dtRecords;
+                dvRecords = new DataView(dtRecords);
+                dataGridView1.Refresh();
+            }
+            catch
+            {
+            }
+        }
+
+        private void deleteRecordsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult dr =
+                MessageBox.Show("Are you sure you want to delete this records?","Confirm to delete",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
+            if(dr == DialogResult.Yes)
+            {
+                //Check tenant records
+                if (dataGridView1.Rows.Count > 0)
+                {
+                    MessageBox.Show("Error: You cannnot delete this record. There still tenant attached on this owner.", "Delete tenant first.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                RemoveOwner(lblIDNumber.Text);
+            }
+        }
+
+        private void RemoveOwner(string sysID)
+        {
+            try
+            {
+                string Query = "Delete from tblCustomerTenant where sysid=" + sysID;
+                cf.ExecuteNonQuery(Query);
+                LoadRecords();
+            }
+            catch
+            {
+            }
+        }
+
+        private void dataGridView2_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (dataGridView2.Rows.Count > 0)
+            {
+                switch (e.Button)
+                {
+                    case MouseButtons.Right:
+                        {
+                            var relativeMousePosition = dataGridView1.PointToClient(Cursor.Position);
+                            contextMenuStrip1.Show(dataGridView1, relativeMousePosition);
+                        }
+                        break;
+                }
+            }
+        }
     }
 }

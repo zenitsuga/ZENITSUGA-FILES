@@ -196,6 +196,7 @@ namespace ZBilling.Class
             int result = 0;
             try
             {
+                db = new Database();
                 string DataResult = string.Empty;
                 db.DBPath = DbLocation;
                 DataResult = db.ExecuteQuery("Select sysID from " + TableName + " " + Criteria).Rows[0][0].ToString();

@@ -98,6 +98,18 @@
     <Compile Include="Forms\frmRooms.Designer.cs">
       <DependentUpon>frmRooms.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmTenantProfile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmTenantProfile.Designer.cs">
+      <DependentUpon>frmTenantProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FrmTransactionReference.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmTransactionReference.Designer.cs">
+      <DependentUpon>FrmTransactionReference.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmUserRole.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -153,6 +165,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmRooms.resx">
       <DependentUpon>frmRooms.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmTenantProfile.resx">
+      <DependentUpon>frmTenantProfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmTransactionReference.resx">
+      <DependentUpon>FrmTransactionReference.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmUserRole.resx">
       <DependentUpon>frmUserRole.cs</DependentUpon>

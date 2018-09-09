@@ -28,6 +28,7 @@ E:\ZENITSUGA FILES\ZBilling\ZBilling\bin\Debug\ZBilling.exe
 E:\ZENITSUGA FILES\ZBilling\ZBilling\bin\Debug\ZBilling.pdb
 E:\ZENITSUGA FILES\ZBilling\ZBilling\bin\Debug\clsLic.dll
 E:\ZENITSUGA FILES\ZBilling\ZBilling\bin\Debug\clsLic.pdb
+E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.csprojResolveAssemblyReference.cache
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.Form1.resources
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.Forms.frmChartOfAccount.resources
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.Forms.frmCompanyProfile.resources
@@ -36,6 +37,8 @@ E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.Forms.FrmFetchRecord
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.Forms.frmLogin.resources
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.Forms.frmRoomAssignment.resources
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.Forms.frmRooms.resources
+E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.Forms.frmTenantProfile.resources
+E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.Forms.FrmTransactionReference.resources
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.Forms.frmUserRole.resources
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.Forms.frmUsers.resources
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.Forms.SearchRecord.resources
@@ -45,4 +48,3 @@ E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.Properties.Resources
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.csproj.GenerateResource.Cache
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.exe
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.pdb
-E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.csprojResolveAssemblyReference.cache

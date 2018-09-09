@@ -17,6 +17,8 @@ namespace ZBilling.Forms
 
         public string Userlogin;
 
+        string customerType = string.Empty;
+
         DataTable dtTransDetails;
         int GetIDTransaction;
 
@@ -94,6 +96,7 @@ namespace ZBilling.Forms
                 dataGridView1.DataSource = null;
                 textBox5.Text = "0.00";
                 textBox6.Text = "0.00";
+                textBox7.Text = "0.00";
                 textBox2.Text = string.Empty;
                 label11.Text = "0";
                 cf.DbLocation = DBPath;
@@ -169,7 +172,10 @@ namespace ZBilling.Forms
 
         private void comboBox1_Enter(object sender, EventArgs e)
         {
-            comboBox1.DataSource = cf.GetRecords("Select RoomNumber from tblRoomAssignment where CustomerID =" + label11.Text);
+            string CustID = customerType == "Owner" ? "CustomerID" : "TenantID";
+            string sysid = customerType == "Owner" ? label11.Text : label12.Text;
+
+            comboBox1.DataSource = cf.GetRecords("Select RoomNumber from tblRoomAssignment where "+ CustID +" =" + sysid);
             comboBox1.DisplayMember = "RoomNumber";
         }
 
@@ -180,8 +186,8 @@ namespace ZBilling.Forms
                 label11.Text = cf.CheckCustomer(textBox2.Text).ToString();
                 if (label11.Text == "0")
                 {
-                    MessageBox.Show("Error: Customer not found. Please check", "Invalid Customer", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    textBox2.Focus();
+                    //MessageBox.Show("Error: Customer not found. Please check", "Invalid Customer", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //textBox2.Focus();
                 }
                 dataGridView2.DataSource = null;
                 dataGridView2.DataSource = cf.GetTransactionSummary(comboBox3.Text, label11.Text);
@@ -225,6 +231,11 @@ namespace ZBilling.Forms
 
         private void button1_Click_1(object sender, EventArgs e)
         {
+            if (dataGridView1.Rows.Count == 0)
+            {
+                MessageBox.Show("Error: Cannot saved 0 transaction. Please add atleast one.", "Invalid Transaction", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             DialogResult dr = MessageBox.Show("This will save your transaction. Would you like to continue?", "Save Transaction", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dr == DialogResult.Yes)
             {
@@ -313,6 +324,19 @@ namespace ZBilling.Forms
 
         private void button2_Click_1(object sender, EventArgs e)
         {
+            if (label11.Text == "0" && label12.Text == "0")
+            {
+                MessageBox.Show("Error: Please select first customer.","Invalid customer",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                button4.Focus();
+                return;
+            }
+
+            if (textBox7.Text == string.Empty)
+            {
+                MessageBox.Show("Error: Cannot add transaction.Please check", "Invalid Amount", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             DialogResult dr = MessageBox.Show("Are you sure you want to add this?", "Add Transaction", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dr == DialogResult.Yes)
             {
@@ -371,13 +395,38 @@ namespace ZBilling.Forms
         {
             CheckSummary();
         }
-
+        
         private void comboBox3_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == '\r')
             {
                 CheckSummary();
             }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            FrmTransactionReference tr = new FrmTransactionReference();
+            tr.DBPath = DBPath;
+            tr.LoginUser = Userlogin;
+            tr.ShowDialog();
+            if (tr.CustomerType == "Owner")
+            {
+                textBox2.Text = tr.customerName;
+                label11.Text = tr.customerID;
+
+                textBox8.Text = string.Empty;
+                label12.Text = "0";
+            }
+            else if(tr.CustomerType == "Tenant")
+            {
+                textBox8.Text = tr.customerName;
+                label12.Text = tr.customerID;
+
+                textBox2.Text = string.Empty;
+                label11.Text = "0";
+            }
+            customerType = tr.CustomerType;
         }
     }
 }

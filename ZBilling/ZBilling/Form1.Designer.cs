@@ -73,6 +73,7 @@
             this.roomAssignmentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.tmrToday = new System.Windows.Forms.Timer(this.components);
+            this.tenantProfileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -394,6 +395,8 @@
             // 
             // customerProfileToolStripMenuItem
             // 
+            this.customerProfileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tenantProfileToolStripMenuItem});
             this.customerProfileToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("customerProfileToolStripMenuItem.Image")));
             this.customerProfileToolStripMenuItem.Name = "customerProfileToolStripMenuItem";
             this.customerProfileToolStripMenuItem.Size = new System.Drawing.Size(206, 56);
@@ -440,6 +443,14 @@
             // 
             this.tmrToday.Enabled = true;
             this.tmrToday.Tick += new System.EventHandler(this.tmrToday_Tick);
+            // 
+            // tenantProfileToolStripMenuItem
+            // 
+            this.tenantProfileToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("tenantProfileToolStripMenuItem.Image")));
+            this.tenantProfileToolStripMenuItem.Name = "tenantProfileToolStripMenuItem";
+            this.tenantProfileToolStripMenuItem.Size = new System.Drawing.Size(186, 56);
+            this.tenantProfileToolStripMenuItem.Text = "&Tenant Profile";
+            this.tenantProfileToolStripMenuItem.Click += new System.EventHandler(this.tenantProfileToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -513,6 +524,7 @@
         private System.Windows.Forms.ToolStripMenuItem roomsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem roomsToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem roomAssignmentToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tenantProfileToolStripMenuItem;
     }
 }
 

@@ -43,7 +43,10 @@ namespace ZBilling.Forms
                 comboBox1.Items.Clear();
                 foreach (string str in FieldOutput.Split(','))
                 {
-                    comboBox1.Items.Add(str);
+                    if (!str.Contains("TagOutput"))
+                    {
+                        comboBox1.Items.Add(str);
+                    }
                 }
                 if (dtrecords.Rows.Count > 0)
                 {
@@ -62,16 +65,23 @@ namespace ZBilling.Forms
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(comboBox1.Text))
+            if (dataGridView1.Rows.Count > 0)
             {
-                if (dvResult.ToTable().Rows.Count > 0)
+                if (!string.IsNullOrEmpty(comboBox1.Text))
                 {
-                    dvResult.RowFilter = string.Format("CONVERT(" +comboBox1.Text + ",System.String) like '" + textBox1.Text + "%'");
-                    
-                    dataGridView1.DataSource = null;
-                    dataGridView1.DataSource = dvResult;
-                    dataGridView1.Refresh();
+                    if (dvResult.ToTable().Rows.Count > 0)
+                    {
+                        dvResult.RowFilter = string.Format("CONVERT(" + comboBox1.Text + ",System.String) like '" + textBox1.Text + "%'");
+
+                        dataGridView1.DataSource = null;
+                        dataGridView1.DataSource = dvResult;
+                        dataGridView1.Refresh();
+                    }
                 }
+            }
+            else
+            {
+                LoadRecords();
             }
         }
 
@@ -85,8 +95,8 @@ namespace ZBilling.Forms
                     TextBox tb = new TextBox();
                     Result = tb;
                     tb.Text = dataGridView1.SelectedRows[0].Cells[0].Value.ToString();
-                    string FieldOut = "OwnerName + (Case when TenantName != '' then ' \\ ' else '' end) + TenantName as 'CustomerName'";
-                    tb.Tag = cf.GetRecordValue(FieldOut, "tblCustomerTenant", tb.Text );
+                    //string FieldOut = "OwnerName + (Case when TenantName != '' then ' \\ ' else '' end) + TenantName as 'CustomerName'";
+                    tb.Tag = dataGridView1.SelectedRows[0].Cells["TagOutput"].Value.ToString(); //cf.GetRecordValue(FieldOut, "tblCustomerTenant", tb.Text );
                     this.Close();
                 }
             }
@@ -102,8 +112,8 @@ namespace ZBilling.Forms
                     TextBox tb = new TextBox();
                     Result = tb;
                     tb.Text = dataGridView1.SelectedRows[0].Cells[0].Value.ToString();
-                    string FieldOut = "OwnerName + (Case when TenantName != '' then ' \\ ' else '' end) + TenantName as 'CustomerName'";
-                    tb.Tag = cf.GetRecordValue(FieldOut, "tblCustomerTenant", tb.Text);
+                    //string FieldOut = "OwnerName + (Case when TenantName != '' then ' \\ ' else '' end) + TenantName as 'CustomerName'";
+                    tb.Tag = dataGridView1.SelectedRows[0].Cells["TagOutput"].Value.ToString();
                     this.Close();
                 }
             }
