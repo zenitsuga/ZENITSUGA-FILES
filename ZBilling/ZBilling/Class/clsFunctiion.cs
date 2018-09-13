@@ -174,6 +174,89 @@ namespace ZBilling.Class
             }
             return result;
         }
+        public bool CheckDueDateTranasactionCreated(string DueDate)
+        {
+            bool result = false;
+            try
+            {
+                DateTime DueDateStart = DateTime.Parse(DueDate);
+                DateTime DueDateEnd = DueDateStart;
+                string Query = "select count(*) from tblTransactionDetails td " +
+                               " Left Join tblTransaction t on td.ReferenceID = t.sysid " +
+                               " where t.DueDate between '"+ DueDateStart +"' and '"+ DueDateEnd +"'";
+                DataTable dtResult = GetRecords(Query);
+                if (dtResult.Rows.Count > 0)
+                {
+                    if (isIntegerValid(dtResult.Rows[0][0].ToString()))
+                    {
+                        int Count = int.Parse(dtResult.Rows[0][0].ToString());
+                        if (Count == 0)
+                        {
+                            result = true;
+                        }
+                    }
+                }
+            }
+            catch
+            {
+            }
+            return result;
+        }
+
+        public bool checkRoomName(string RoomName,ref int RoomCount)
+        {
+            bool result = false;
+            try
+            {
+                string Query = "Select * from tblRooms where RoomName='" + RoomName + "' order by sysID desc";
+                DataTable dtRecords = GetRecords(Query);
+                if (dtRecords.Rows.Count == 0)
+                {
+                    result = true;
+                    RoomCount = 0;
+                }
+                else if(dtRecords.Rows.Count > 0)
+                {
+                    RoomCount = dtRecords.Rows.Count;
+                }
+            }
+            catch
+            {
+            }
+            return result;
+        }
+        public void PreviousRoomDisable(string RoomName)
+        {
+            try
+            {
+                string Query = "Update tblRooms set isActive = 0 where RoomName = '" + RoomName + "'";
+                ExecuteNonQuery(Query);
+            }
+            catch
+            {
+            }
+        }
+
+        public bool CheckMonthlyRate(string RoomNumber,ref string Amount)
+        {
+            bool result = false;
+            try
+            {
+                string Query = "SELECT top 1 MonthlyDue from tblrooms " +
+                               "where RoomName = '"+ RoomNumber +"' and isActive = 1 " +
+                               "order by sysid desc ";
+                DataTable dtResult = GetRecords(Query);
+                if (dtResult.Rows.Count > 0)
+                {
+                    Amount = string.Format("{0:C}", dtResult.Rows[0][0].ToString().Replace("$", ""));
+                }
+            }
+            catch
+            {
+            }
+            return result;
+        }
+
         public string GetFieldValue(string sysID, string TableName, string FieldOutput)
         {
             string result = string.Empty;
@@ -464,12 +547,12 @@ namespace ZBilling.Class
             return result;
         }
 
-        public bool InsertTransaction(string TransactionNo, string Description, string DateTrans, string CustomerID, string RoomID, string OpeningBal, string OutstandingBal,string UserID)
+        public bool InsertTransaction(string TransactionNo, string Description, string DateTrans, string CustomerID, string RoomID, string OpeningBal, string OutstandingBal,string UserID,string DueDate)
         {
             bool result = false;
             try
             {
-                string Query = "Insert into tblTransaction(TransactionNo,Description,DateTransaction,CustomerID,RoomID,OpeningBalance,OutstandingBalance,userID) values ('" + TransactionNo + "','Transaction Code: "+ TransactionNo +"','"+ DateTrans +"'," + CustomerID + ","+ RoomID + "," + OpeningBal + "," + OutstandingBal + "," + UserID + ")" ;
+                string Query = "Insert into tblTransaction(TransactionNo,Description,DateTransaction,CustomerID,RoomID,OpeningBalance,OutstandingBalance,userID,DueDate) values ('" + TransactionNo + "','Transaction Code: "+ TransactionNo +"','"+ DateTrans +"'," + CustomerID + ","+ RoomID + "," + OpeningBal + "," + OutstandingBal + "," + UserID + ",'"+ DueDate  +"')" ;
                 result = ExecuteNonQuery(Query);
             }
             catch

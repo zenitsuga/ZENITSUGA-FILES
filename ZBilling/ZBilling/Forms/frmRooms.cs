@@ -45,7 +45,7 @@ namespace ZBilling.Forms
             try
             {
                 cf.DbLocation = DBPath;
-                string Query = "Select r.sysId as 'ID',r.RoomType,r.RoomName,u.Username,r.Description,r.SizeSQM as 'Size(SQM)' from tblRooms r left join tblUsers u on r.UserID = u.sysID where r.isActive = 1";
+                string Query = "Select r.sysId as 'ID',r.RoomType,r.RoomName,u.Username,r.Description,r.SizeSQM as 'Size(SQM)',r.PricePerSQM,r.MonthlyDue from tblRooms r left join tblUsers u on r.UserID = u.sysID where r.isActive = 1";
                 dataGridView1.DataSource = null;
                 dataGridView1.DataSource = cf.GetRecords(Query);
                 dataGridView1.Refresh();
@@ -67,13 +67,31 @@ namespace ZBilling.Forms
                 MessageBox.Show("Error: Cannot save entry. Please check your details.", "Invalid Room Details", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return; 
             }
+            int RoomCount=0;
+
+            if(!cf.checkRoomName(textBox1.Text,ref RoomCount))
+            {
+                if (RoomCount > 0)
+                {
+                    DialogResult dr = MessageBox.Show("Warning: Room name already exists. Would you like to make this entry as new room?", "Room Exists", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (dr == DialogResult.Yes)
+                    {
+                        cf.PreviousRoomDisable(textBox1.Text);
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+            }
 
             try
             {
                 int UID = cf.GetSysID("tblUsers"," where Username = '"+ LoginUser +"'");
-                int isActive = checkBox1.Checked ? 1:2;
-                string Query = "Insert into tblRooms(RoomType,RoomName,UserID,Description,SizeSQM,isActive)values('" + comboBox1.Text + "','" + textBox1.Text +"'," + UID + ",'" + textBox2.Text +"','" + textBox3.Text + "',"+ isActive +")";
-
+                int isActive = checkBox1.Checked ? 1:0;
+                ComputeMonthlyDue();
+                string Query = "Insert into tblRooms(RoomType,RoomName,UserID,Description,SizeSQM,isActive,MonthlyDue)values('" + comboBox1.Text + "','" + textBox1.Text +"'," + UID + ",'" + textBox2.Text +"','" + textBox3.Text + "',"+ isActive + ","+ textBox5.Text +")";
+                
                 if (cf.ExecuteNonQuery(Query))
                 {
                     MessageBox.Show("Record Saved.", "Room saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -130,6 +148,59 @@ namespace ZBilling.Forms
                 {
                     MessageBox.Show("Error: Invalid Room size", "Room Size Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     textBox3.Focus();
+                    return;
+                }
+            }
+            ComputeMonthlyDue();
+        }
+
+        private void ComputeMonthlyDue()
+        {
+            try
+            {
+                double SQM = double.Parse(textBox3.Text);
+                double PSQ = double.Parse(textBox4.Text);
+
+                textBox5.Text = string.Format("{0:C}", (SQM * PSQ)).Replace("$", "");
+            }
+            catch
+            {
+                textBox5.Text = string.Format("{0:C}", "0.00");
+            }
+        }
+
+        private void textBox4_Leave(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(textBox4.Text))
+            {
+                if(cf.isIntegerValid(textBox4.Text.Replace(".","")))
+                {
+                    textBox4.Text = string.Format("{0:C}", textBox4.Text).Replace("$", "");
+                }else
+                {
+                    textBox4.Text = string.Format("{0:C}", "0.00").Replace("$", "");
+                }
+            }
+            else
+            {
+                textBox4.Text = string.Format("{0:C}", "0.00").Replace("$", "");
+            }
+            ComputeMonthlyDue();
+        }
+
+        private void textBox4_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if((e.KeyChar.ToString() == "\b" || e.KeyChar.ToString() == "\n" || e.KeyChar.ToString() == "\r"))
+            {
+                return;
+            }
+            if (!cf.isIntegerValid(e.KeyChar.ToString())) 
+            {
+                if (!cf.isIntegerValid(e.KeyChar.ToString()) && e.KeyChar.ToString() != ".")
+                {
+                    MessageBox.Show("Error: Invalid Amount. Please check your entry.", "Amount is not valid.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    textBox4.Text = string.Empty;
+                    textBox4.Focus();
                     return;
                 }
             }

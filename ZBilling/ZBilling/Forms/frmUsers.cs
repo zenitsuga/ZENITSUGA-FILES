@@ -134,13 +134,14 @@ namespace ZBilling.Forms
                 FC.Add("Password");
                 FC.Add("Role");
                 FC.Add("isActive");
-                FC.Add("AllowUserAccess");
+                FC.Add("AllowAccessUser");
                 List<string> FV = new List<string>();
                 FV.Add(textBox1.Text);
-                FV.Add(textBox1.Text);
+                FV.Add(textBox2.Text);
                 
                 List<string> FI = new List<string>();
-                FV.Add(comboBox1.ValueMember);
+                int UserRole = cf.GetSysID("tblUserRole", " where Role='" + comboBox1.Text + "'");
+                FI.Add(UserRole.ToString());
                 FI.Add(checkBox1.Checked ? "1" : "0");
                 FI.Add(checkBox2.Checked ? "1" : "0");
                 if (!cf.InsertRecords("tblUsers", FC, FV, FI))

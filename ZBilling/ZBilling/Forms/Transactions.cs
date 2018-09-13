@@ -38,8 +38,11 @@ namespace ZBilling.Forms
                 dtTransDetails = new DataTable();
                 dtTransDetails.Columns.Add("ReferenceID");
                 dtTransDetails.Columns.Add("Accounts");
+                dtTransDetails.Columns.Add("Description");
                 dtTransDetails.Columns.Add("Amount");
                 dtTransDetails.Columns.Add("Remarks");
+
+                dataGridView1.DataSource = dtTransDetails;
             }catch
             {
             }
@@ -120,12 +123,30 @@ namespace ZBilling.Forms
                 }
                 DataTableDetails();
                 textBox5.Text = string.Format("{0:C}", cf.ComputeLastOutStandingForBalance(label11.Text)).Replace("$", "");
+                AutoLoadInfo(textBox11, textBox12, textBox13);
             }
             catch
             {
             }
         }
-
+        private void AutoLoadInfo(TextBox tbCUStart,TextBox tbCUEnd,TextBox tbDueDate)
+        {
+            try
+            {
+                string Query = "select top 1 * from tblSettings where isActive=1 order by sysid desc";
+                DataTable dtRecords = cf.GetRecords(Query);
+                if (dtRecords.Rows.Count > 0)
+                {
+                    tbDueDate.Text = dtRecords.Rows[0]["CurrentYear"].ToString() + "-" + dtRecords.Rows[0]["CurrentMonth"].ToString() + "-" + dtRecords.Rows[0]["MonthDue"].ToString();
+                    int DaysBeforeCutoff = int.Parse(dtRecords.Rows[0]["BillingCoverDays"] != null ? dtRecords.Rows[0]["BillingCoverDays"].ToString() : "30");
+                    tbCUStart.Text = DateTime.Parse(tbDueDate.Text).AddDays(-DaysBeforeCutoff).ToString("yyyy-MM-dd");
+                    tbCUEnd.Text = DateTime.Parse(tbCUStart.Text).AddDays(DaysBeforeCutoff).ToString("yyyy-MM-dd");
+                }
+            }
+            catch
+            {
+            }
+        }
         private void ComputeOutStanding()
         {
             double Total = 0.00;
@@ -169,15 +190,27 @@ namespace ZBilling.Forms
             ffr.TableName = "tblCustomerTenant";
             ffr.ShowDialog();
         }
+        private void LoadRoom()
+        {
+            try
+            {
+                string CustID = customerType == "Owner" ? "CustomerID" : "TenantID";
+                string sysid = customerType == "Owner" ? label11.Text : label12.Text;
 
+                comboBox1.DataSource = cf.GetRecords("Select RoomNumber from tblRoomAssignment where " + CustID + " =" + sysid);
+                comboBox1.DisplayMember = "RoomNumber";
+            }
+            catch
+            {
+            }
+        }
         private void comboBox1_Enter(object sender, EventArgs e)
         {
-            string CustID = customerType == "Owner" ? "CustomerID" : "TenantID";
-            string sysid = customerType == "Owner" ? label11.Text : label12.Text;
-
-            comboBox1.DataSource = cf.GetRecords("Select RoomNumber from tblRoomAssignment where "+ CustID +" =" + sysid);
-            comboBox1.DisplayMember = "RoomNumber";
+            LoadRoom();
+            ComputeSummary();
+            ComputeOutStanding();
         }
+
 
         private void textBox2_Leave(object sender, EventArgs e)
         {
@@ -231,33 +264,8 @@ namespace ZBilling.Forms
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            if (dataGridView1.Rows.Count == 0)
-            {
-                MessageBox.Show("Error: Cannot saved 0 transaction. Please add atleast one.", "Invalid Transaction", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            DialogResult dr = MessageBox.Show("This will save your transaction. Would you like to continue?", "Save Transaction", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (dr == DialogResult.Yes)
-            {
-                string userID = cf.GetSysID("tblusers","where username ='" + Userlogin + "'").ToString();
-
-                if (cf.InsertTransaction(TransactionID, string.Empty, textBox4.Text, label11.Text, comboBox1.Text, FixedNegaAmount(textBox5.Text), FixedNegaAmount(textBox6.Text), userID))
-                {
-                    MessageBox.Show("Transaction Saved", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    dataGridView1.DataSource = null;
-                    button3.Enabled = true;
-                }
-                else
-                {
-                    MessageBox.Show("Error Saving Transaction", "Please check your transaction", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    button3.Enabled = false;
-                }
-
-                dataGridView2.DataSource = null;
-                dataGridView2.DataSource = cf.GetTransactionSummary(comboBox3.Text, label11.Text);
-                ComputeSummary();
-            }
-
+            frmBillingAccount ba = new frmBillingAccount();
+            ba.ShowDialog();
         }
 
         private string FixedNegaAmount(string Amount)
@@ -276,18 +284,31 @@ namespace ZBilling.Forms
             return Result;
         }
 
+        private DataTable AddTransaction(string TransactionID,string Account,string Description,string Amount,string Remarks)
+        {
+            try
+            {
+                DataRow drow = dtTransDetails.NewRow();
+                drow[0] = TransactionID;
+                drow[1] = Account;
+                drow[2] = Description;
+                drow[3] = Amount;
+                drow[4] = string.Empty;
+                dtTransDetails.Rows.Add(drow);
+            }
+            catch
+            {
+            }
+            return dtTransDetails;
+        }
+
         private void button2_Click(object sender, EventArgs e)
         {
             DialogResult dr = MessageBox.Show("Are you sure you want to add this?", "Add Transaction", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dr == DialogResult.Yes)
             {
-                DataRow drow = dtTransDetails.NewRow();
-                drow[0] = TransactionID;
-                drow[1] = comboBox2.Text;
-                drow[2] = cf.CheckAmountByType(comboBox2.Text,textBox7.Text);
-                drow[3] = textBox3.Text;
-                dtTransDetails.Rows.Add(drow);
-                dataGridView1.DataSource = dtTransDetails;
+                
+                //dataGridView1.DataSource = AddTransaction(TransactionID,;
 
             }
         }
@@ -340,13 +361,14 @@ namespace ZBilling.Forms
             DialogResult dr = MessageBox.Show("Are you sure you want to add this?", "Add Transaction", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dr == DialogResult.Yes)
             {
-                DataRow drow = dtTransDetails.NewRow();
-                drow[0] = TransactionID;
-                drow[1] = comboBox2.Text;
-                drow[2] = cf.CheckAmountByType(comboBox2.Text, textBox7.Text);
-                drow[3] = textBox3.Text;
-                dtTransDetails.Rows.Add(drow);
+                //DataRow drow = dtTransDetails.NewRow();
+                //drow[0] = TransactionID;
+                //drow[1] = comboBox2.Text;
+                //drow[2] = cf.CheckAmountByType(comboBox2.Text, textBox7.Text);
+                //drow[3] = textBox3.Text;
+                //dtTransDetails.Rows.Add(drow);
                 dataGridView1.DataSource = dtTransDetails;
+                
                 ComputeOutStanding();
                 textBox3.Text = string.Empty;
                 textBox7.Text = string.Empty;
@@ -423,10 +445,226 @@ namespace ZBilling.Forms
                 textBox8.Text = tr.customerName;
                 label12.Text = tr.customerID;
 
-                textBox2.Text = string.Empty;
-                label11.Text = "0";
             }
             customerType = tr.CustomerType;
+            dataGridView1.DataSource = null;
+            LoadRoom();
+        }
+
+        private void comboBox1_SelectedValueChanged(object sender, EventArgs e)
+        {
+            ComputeOutStanding();
+        }
+
+        private void LoadTransactionDetails(string DueDate)
+        {
+            try
+            {
+                dtTransDetails = new DataTable();
+                DataTableDetails();
+                DateTime DueDateStart = DateTime.Parse(DueDate);
+                DateTime DueDateEnd = DueDateStart;
+                string Query = "select * from tblTransactionDetails td " +
+                               " Left Join tblTransaction t on td.ReferenceID = t.sysid " +
+                               " where t.DueDate between '" + DueDateStart + "' and '" + DueDateEnd + "'";
+                DataTable dtResult = cf.GetRecords(Query);
+                if (dtResult.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dtResult.Rows)
+                    {
+                        DataRow drow = dtTransDetails.NewRow();
+                        drow["ReferenceID"] = dr["ReferenceID"].ToString();
+                        drow["Accounts"] = dr["Accounts"].ToString();
+                        drow["Description"] = dr["Description"].ToString();
+                        drow["Amount"] = dr["Amount"].ToString();
+                        drow["Remarks"] = dr["Remarks"].ToString();
+                        dtTransDetails.Rows.Add(drow);
+                    }
+                    dataGridView1.DataSource = dtTransDetails;
+                    ComputeOutStanding();
+                    ComputeSummary();
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        private void InsertMonthlyDue()
+        {
+            try
+            {
+                string Amount = "0.00";
+                DataRow drow = dtTransDetails.NewRow();
+                drow[0] = TransactionID;
+                drow[1] = "MODUE";
+                drow[2] = "Monthly Due for " + DateTime.Now.ToString("MMMM");
+                cf.CheckMonthlyRate(comboBox1.Text, ref Amount);
+                drow[3] = Amount;
+                drow[4] = "Auto computed";
+
+                if (Amount == "0.00")
+                {
+                    MessageBox.Show("Error: Amount Due is 0.00. Cannot saved the transaction. Please check", "Amount is 0.00", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                dtTransDetails.Rows.Add(drow);
+                dataGridView1.DataSource = dtTransDetails;
+            }
+            catch
+            {
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if(string.IsNullOrEmpty(textBox13.Text))
+                {
+                    MessageBox.Show("Error: Cannot saved transaction. Please check your due date.", "Invalid DueDate", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (dataGridView1.Rows.Count == 0)
+                {
+                    MessageBox.Show("Error: Cannot saved 0 transaction. Please add atleast one.", "Invalid Transaction", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                DialogResult dr = MessageBox.Show("This will save your transaction. Would you like to continue?", "Save Transaction", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dr == DialogResult.Yes)
+                {
+                    string userID = cf.GetSysID("tblusers", "where username ='" + Userlogin + "'").ToString();
+                    
+                    if (cf.InsertTransaction(TransactionID, string.Empty, textBox4.Text, label11.Text, comboBox1.Text, FixedNegaAmount(textBox5.Text), FixedNegaAmount(textBox6.Text), userID, textBox13.Text))
+                    {
+                            if (SaveBillingDetails())
+                            {
+                        
+                                MessageBox.Show("Transaction Saved", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                dataGridView1.DataSource = null;
+                                button3.Enabled = true;
+                            }
+                            else
+                            {
+                                MessageBox.Show("Error Saving Transaction", "Please check your transaction details", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                DeleteBillingDetails(TransactionID);
+                                button3.Enabled = false;
+                                return;
+                            }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error Saving Transaction", "Please check your transaction", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        button3.Enabled = false;
+                    }
+                    ComputeSummary();
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Error in Saving Billing.Please check", "Saving Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void DeleteBillingDetails(string RefID)
+        {
+            try
+            {
+                int refid = cf.GetSysID("tblTransaction", " where TransactionNo='" + RefID + "'");
+                string Query = "Delete from tblTransactionDetails where referenceID=" + refid;
+                cf.ExecuteNonQuery(Query);
+                Query = "Delete from tblTransaction where sysID=" + refid;
+                cf.ExecuteNonQuery(Query);
+            }
+            catch
+            {
+            }
+        }
+
+        private bool SaveBillingDetails()
+        {
+            bool result = false;
+            try
+            {
+                foreach (DataGridViewRow dgr in dataGridView1.Rows)
+                {
+                    string userID = cf.GetSysID("tblusers", "where username ='" + Userlogin + "'").ToString();
+                    string RefID = dgr.Cells["ReferenceID"].Value.ToString();
+                    string Account = dgr.Cells["Accounts"].Value.ToString();
+                    string Description = dgr.Cells["Description"].Value.ToString();
+                    string Amount = dgr.Cells["Amount"].Value.ToString();
+                    string Remarks = dgr.Cells["Remarks"].Value.ToString();
+
+                    int billid = 0;
+                    int refid = 0;
+
+                    refid = cf.GetSysID("tblTransaction", " where TransactionNo='" + RefID + "'");
+                    billid = cf.GetSysID("tblBillingAccount"," where AccountCode = '" + Account + "'");
+
+                    if (!string.IsNullOrEmpty(RefID) || refid != 0)
+                    {
+                        if (!string.IsNullOrEmpty(Account) || billid != 0 )
+                        {
+                            string Query = "Insert into tblTransactionDetails (ReferenceID,Accounts,Description,Amount,UserID,isActive,Remarks)values (" + refid + "," + billid + ",'" + Description + "'," + Amount + "," + userID + ",1,'" + Remarks + "')";
+
+                            result = cf.ExecuteNonQuery(Query);
+                        }else
+                        {
+                            MessageBox.Show("Error in Account Name. Please check","Failed to save entry",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                            return false; 
+                        }
+                    }else
+                    {
+                        MessageBox.Show("Error in Reference ID. Please check","Failed to save entry",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                            return false;
+                    }
+                }
+            }
+            catch
+            {
+            }
+            return result;
+        }
+
+        private void label12_TextChanged(object sender, EventArgs e)
+        {
+            string Query = "Select c.SysID,c.Lastname + ',' + c.Firstname as 'CustomerName' from tblCustomerTenant c left Join tblTenant t on t.OwnerID = c.sysid where t.sysId = " + label12.Text;
+            DataTable dtResult = cf.GetRecords(Query);
+            if (dtResult.Rows.Count > 0)
+            {
+                textBox2.Text = dtResult.Rows[0]["CustomerName"].ToString();
+                label11.Text = dtResult.Rows[0]["SysID"].ToString();
+            }
+        }
+
+        private void comboBox1_Leave(object sender, EventArgs e)
+        {
+            try{
+                if (!string.IsNullOrEmpty(textBox13.Text))
+                {
+                    if (cf.CheckDueDateTranasactionCreated(textBox13.Text))
+                    {
+                        if (DateTime.Now.Subtract(DateTime.Parse(textBox13.Text)).Days > 0)
+                        {
+                            if (!checkBox1.Checked)
+                            {
+                                DialogResult dr = MessageBox.Show("Warning: Due date for this month was reach. Would you like to check override cut-off to generate billing for this month.", "Transaction OverDue", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                                if (dr == DialogResult.Yes)
+                                {
+                                    checkBox1.Checked = true;
+
+                                }
+                            }
+                        }
+                        InsertMonthlyDue();
+                    }
+                }
+                LoadTransactionDetails(textBox13.Text);
+            }catch
+                {
+                }
         }
     }
 }

@@ -425,6 +425,7 @@ namespace ZBilling
                 trans.MdiParent = this;
                 trans.DBPath = DatabasePath;
                 trans.Userlogin = tssUserlogin.Text;
+                trans.WindowState = FormWindowState.Maximized;
                 trans.Show();
             }
         }
@@ -472,6 +473,7 @@ namespace ZBilling
                 rm.MdiParent = this;
                 rm.DBPath = DatabasePath;
                 rm.LoginUser = tssUserlogin.Text;
+                rm.WindowState = FormWindowState.Maximized;
                 rm.Show();
             }
         }
