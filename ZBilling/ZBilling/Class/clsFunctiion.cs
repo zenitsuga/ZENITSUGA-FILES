@@ -547,12 +547,18 @@ namespace ZBilling.Class
             return result;
         }
 
-        public bool InsertTransaction(string TransactionNo, string Description, string DateTrans, string CustomerID, string RoomID, string OpeningBal, string OutstandingBal,string UserID,string DueDate)
+        public bool InsertTransaction(string TransactionNo, string Description, string DateTrans, string CustomerID, string RoomID, string OpeningBal, string OutstandingBal,string UserID,string DueDate,string CustomerType)
         {
             bool result = false;
             try
             {
                 string Query = "Insert into tblTransaction(TransactionNo,Description,DateTransaction,CustomerID,RoomID,OpeningBalance,OutstandingBalance,userID,DueDate) values ('" + TransactionNo + "','Transaction Code: "+ TransactionNo +"','"+ DateTrans +"'," + CustomerID + ","+ RoomID + "," + OpeningBal + "," + OutstandingBal + "," + UserID + ",'"+ DueDate  +"')" ;
+
+                if (!string.IsNullOrEmpty(CustomerType))
+                {
+                    Query = "Insert into tblTransaction(TransactionNo,Description,DateTransaction,tenantID,RoomID,OpeningBalance,OutstandingBalance,userID,DueDate) values ('" + TransactionNo + "','Transaction Code: " + TransactionNo + "','" + DateTrans + "'," + CustomerID + "," + RoomID + "," + OpeningBal + "," + OutstandingBal + "," + UserID + ",'" + DueDate + "')";
+                }
+
                 result = ExecuteNonQuery(Query);
             }
             catch

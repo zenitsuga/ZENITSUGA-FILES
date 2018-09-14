@@ -12,3 +12,4 @@ E:\ZENITSUGA FILES\ZBilling\ProgramGrabber\obj\x86\Debug\ProgramGrabber.Properti
 E:\ZENITSUGA FILES\ZBilling\ProgramGrabber\obj\x86\Debug\ProgramGrabber.csproj.GenerateResource.Cache
 E:\ZENITSUGA FILES\ZBilling\ProgramGrabber\obj\x86\Debug\ProgramGrabber.exe
 E:\ZENITSUGA FILES\ZBilling\ProgramGrabber\obj\x86\Debug\ProgramGrabber.pdb
+E:\ZENITSUGA FILES\ZBilling\ProgramGrabber\obj\x86\Debug\ProgramGrabber.csprojResolveAssemblyReference.cache

@@ -276,6 +276,7 @@
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.Size = new System.Drawing.Size(846, 245);
             this.dataGridView1.TabIndex = 9;
+            this.dataGridView1.Enter += new System.EventHandler(this.dataGridView1_Enter);
             // 
             // button1
             // 
@@ -384,6 +385,7 @@
             this.comboBox1.Size = new System.Drawing.Size(92, 21);
             this.comboBox1.TabIndex = 8;
             this.comboBox1.SelectedValueChanged += new System.EventHandler(this.comboBox1_SelectedValueChanged);
+            this.comboBox1.TextChanged += new System.EventHandler(this.comboBox1_TextChanged);
             this.comboBox1.Enter += new System.EventHandler(this.comboBox1_Enter);
             this.comboBox1.Leave += new System.EventHandler(this.comboBox1_Leave);
             // 

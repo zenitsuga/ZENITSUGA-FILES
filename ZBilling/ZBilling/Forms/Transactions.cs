@@ -96,6 +96,12 @@ namespace ZBilling.Forms
         {
             try
             {
+                CheckDueDate();
+
+                comboBox1.DataSource = null;
+                textBox2.Text = textBox8.Text = string.Empty;
+                label11.Text = label12.Text = "0";
+                LoadRoom();
                 dataGridView1.DataSource = null;
                 textBox5.Text = "0.00";
                 textBox6.Text = "0.00";
@@ -142,6 +148,16 @@ namespace ZBilling.Forms
                     tbCUStart.Text = DateTime.Parse(tbDueDate.Text).AddDays(-DaysBeforeCutoff).ToString("yyyy-MM-dd");
                     tbCUEnd.Text = DateTime.Parse(tbCUStart.Text).AddDays(DaysBeforeCutoff).ToString("yyyy-MM-dd");
                 }
+            }
+            catch
+            {
+            }
+        }
+        private void ComputePrevBilling(DateTime DueDate)
+        {
+            try
+            {
+
             }
             catch
             {
@@ -207,6 +223,10 @@ namespace ZBilling.Forms
         private void comboBox1_Enter(object sender, EventArgs e)
         {
             LoadRoom();
+            if (string.IsNullOrEmpty(textBox2.Text))
+            {
+                return;
+            }
             ComputeSummary();
             ComputeOutStanding();
         }
@@ -386,6 +406,8 @@ namespace ZBilling.Forms
                 "New Transaction???", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dr == DialogResult.Yes)
             {
+                textBox2.Text = textBox8.Text = string.Empty;
+                label11.Text = label12.Text = "0";
                 loadNewTrans();
             }
         }
@@ -453,6 +475,7 @@ namespace ZBilling.Forms
 
         private void comboBox1_SelectedValueChanged(object sender, EventArgs e)
         {
+            CheckDueDate();
             ComputeOutStanding();
         }
 
@@ -462,19 +485,21 @@ namespace ZBilling.Forms
             {
                 dtTransDetails = new DataTable();
                 DataTableDetails();
+                string CustID = string.IsNullOrEmpty(label11.Text) ? " and CustomerID = " + label11.Text : " and TenantID =" + label12.Text;   
                 DateTime DueDateStart = DateTime.Parse(DueDate);
                 DateTime DueDateEnd = DueDateStart;
-                string Query = "select * from tblTransactionDetails td " +
+                string Query = "select b.AccountCode,* from tblTransactionDetails td " +
                                " Left Join tblTransaction t on td.ReferenceID = t.sysid " +
-                               " where t.DueDate between '" + DueDateStart + "' and '" + DueDateEnd + "'";
+                               " Left Join tblBillingAccount b on td.Accounts = b.sysid " +
+                               " where t.DueDate between '" + DueDateStart + "' and '" + DueDateEnd + "' " + CustID;
                 DataTable dtResult = cf.GetRecords(Query);
                 if (dtResult.Rows.Count > 0)
                 {
                     foreach (DataRow dr in dtResult.Rows)
                     {
                         DataRow drow = dtTransDetails.NewRow();
-                        drow["ReferenceID"] = dr["ReferenceID"].ToString();
-                        drow["Accounts"] = dr["Accounts"].ToString();
+                        drow["ReferenceID"] = dr["TransactionNo"].ToString();
+                        drow["Accounts"] = dr["AccountCode"].ToString();
                         drow["Description"] = dr["Description"].ToString();
                         drow["Amount"] = dr["Amount"].ToString();
                         drow["Remarks"] = dr["Remarks"].ToString();
@@ -494,23 +519,30 @@ namespace ZBilling.Forms
         {
             try
             {
-                string Amount = "0.00";
-                DataRow drow = dtTransDetails.NewRow();
-                drow[0] = TransactionID;
-                drow[1] = "MODUE";
-                drow[2] = "Monthly Due for " + DateTime.Now.ToString("MMMM");
-                cf.CheckMonthlyRate(comboBox1.Text, ref Amount);
-                drow[3] = Amount;
-                drow[4] = "Auto computed";
-
-                if (Amount == "0.00")
+                if (string.IsNullOrEmpty(textBox2.Text))
                 {
-                    MessageBox.Show("Error: Amount Due is 0.00. Cannot saved the transaction. Please check", "Amount is 0.00", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+                if (cf.isIntegerValid(comboBox1.Text))
+                {
+                    string Amount = "0.00";
+                    DataRow drow = dtTransDetails.NewRow();
+                    drow[0] = TransactionID;
+                    drow[1] = "MODUE";
+                    drow[2] = "Monthly Due for " + DateTime.Now.ToString("MMMM");
+                    cf.CheckMonthlyRate(comboBox1.Text, ref Amount);
+                    drow[3] = Amount;
+                    drow[4] = "Auto computed";
 
-                dtTransDetails.Rows.Add(drow);
-                dataGridView1.DataSource = dtTransDetails;
+                    if (Amount == "0.00")
+                    {
+                        MessageBox.Show("Error: Amount Due is 0.00. Cannot saved the transaction. Please check", "Amount is 0.00", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    dtTransDetails.Rows.Add(drow);
+                    dataGridView1.DataSource = dtTransDetails;
+                }
             }
             catch
             {
@@ -536,12 +568,38 @@ namespace ZBilling.Forms
                 if (dr == DialogResult.Yes)
                 {
                     string userID = cf.GetSysID("tblusers", "where username ='" + Userlogin + "'").ToString();
-                    
-                    if (cf.InsertTransaction(TransactionID, string.Empty, textBox4.Text, label11.Text, comboBox1.Text, FixedNegaAmount(textBox5.Text), FixedNegaAmount(textBox6.Text), userID, textBox13.Text))
+
+                    int TransactionCount = cf.GetRecords("select * from tbltransaction where transactionNo = '" + textBox1.Text + "'").Rows.Count;
+                    if (TransactionCount > 0)
                     {
+                        string updateQuery = "update tblTransaction set OpeningBalance = " + FixedNegaAmount(textBox5.Text) + ",OutstandingBalance=" + FixedNegaAmount(textBox6.Text) + " where transactionNo = '" + textBox1.Text + "'";
+                        if (cf.ExecuteNonQuery(updateQuery))
+                        {
+                            DeleteBillingDetails(textBox1.Text);
                             if (SaveBillingDetails())
                             {
-                        
+                                MessageBox.Show("Transaction Saved", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                dataGridView1.DataSource = null;
+                                button3.Enabled = true;
+                            }
+                            else
+                            {
+                                MessageBox.Show("Error Saving Transaction", "Please check your transaction details", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                DeleteBillingDetails(TransactionID);
+                                button3.Enabled = false;
+                                return;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        string CustomerType = label12.Text != "0" ? "TenantID" : string.Empty;
+                        string CustID = label12.Text != "0" ? label12.Text : label11.Text; 
+                    if (cf.InsertTransaction(TransactionID, string.Empty, textBox4.Text, CustID, comboBox1.Text, FixedNegaAmount(textBox5.Text), FixedNegaAmount(textBox6.Text), userID, textBox13.Text,CustomerType))
+                    {
+                        DeleteBillingDetails(TransactionID);
+                            if (SaveBillingDetails())
+                            {
                                 MessageBox.Show("Transaction Saved", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 dataGridView1.DataSource = null;
                                 button3.Enabled = true;
@@ -559,6 +617,7 @@ namespace ZBilling.Forms
                         MessageBox.Show("Error Saving Transaction", "Please check your transaction", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         button3.Enabled = false;
                     }
+                }
                     ComputeSummary();
                 }
             }
@@ -566,6 +625,8 @@ namespace ZBilling.Forms
             {
                 MessageBox.Show("Error in Saving Billing.Please check", "Saving Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            ComputeOutStanding();
+            loadNewTrans();
         }
 
         private void DeleteBillingDetails(string RefID)
@@ -574,8 +635,6 @@ namespace ZBilling.Forms
             {
                 int refid = cf.GetSysID("tblTransaction", " where TransactionNo='" + RefID + "'");
                 string Query = "Delete from tblTransactionDetails where referenceID=" + refid;
-                cf.ExecuteNonQuery(Query);
-                Query = "Delete from tblTransaction where sysID=" + refid;
                 cf.ExecuteNonQuery(Query);
             }
             catch
@@ -639,9 +698,64 @@ namespace ZBilling.Forms
             }
         }
 
-        private void comboBox1_Leave(object sender, EventArgs e)
+        private bool CheckExistTranasactionDueDate(string duedate,string RoomID,string CustID)
         {
-            try{
+            bool result = false;
+            try
+            {
+                if (string.IsNullOrEmpty(CustID))
+                {
+                    return false;
+                }
+                string Query = "select * from tbltransaction where duedate = '"+ duedate +"' and roomID = " + RoomID + " " + (string.IsNullOrEmpty(CustID) ? string.Empty:" " + CustID);
+                DataTable dtRecords = cf.GetRecords(Query);
+                if (dtRecords.Rows.Count > 0)
+                {
+                    result = true;
+                }
+            }
+            catch
+            {
+            }
+            return result;
+        }
+
+        private bool DueDateVsCurrent()
+        {
+            bool result = false;
+            try
+            {
+                
+            }
+            catch
+            {
+            }
+            return result;
+        }
+
+        private void CheckDueDate()
+        {
+            try
+            {
+                string duedate = textBox13.Text;
+                string CustID = label11.Text != "0" ? " and CustomerID=" + label11.Text: string.Empty;
+                CustID = label12.Text != "0" ? " and TenantID=" + label12.Text : string.Empty;
+
+                if (CheckExistTranasactionDueDate(duedate, comboBox1.Text, CustID))
+                {
+                    string Query = "select * from tbltransaction where duedate = '" + textBox13.Text + "' and roomID = 101 " + (string.IsNullOrEmpty(CustID) ? string.Empty : CustID);
+                    DataTable dtRecords = cf.GetRecords(Query);
+                    if (dtRecords.Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in dtRecords.Rows)
+                        {
+                            textBox1.Text = dr["TransactionNo"].ToString();
+                            textBox5.Text = dr["OpeningBalance"].ToString();
+                            textBox6.Text = dr["OutstandingBalance"].ToString();
+                        }
+                    }
+                }
+
                 if (!string.IsNullOrEmpty(textBox13.Text))
                 {
                     if (cf.CheckDueDateTranasactionCreated(textBox13.Text))
@@ -658,13 +772,42 @@ namespace ZBilling.Forms
                                 }
                             }
                         }
-                        InsertMonthlyDue();
                     }
                 }
                 LoadTransactionDetails(textBox13.Text);
-            }catch
+                if (dataGridView1.Rows.Count == 0)
                 {
+                    InsertMonthlyDue();
                 }
+            }
+            catch
+            {
+            }
+        }
+
+        private void comboBox1_Leave(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(textBox2.Text))
+            {
+                CheckDueDate();
+            }
+        }
+
+        private void dataGridView1_Enter(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(textBox2.Text))
+            {
+                CheckDueDate();
+                ComputeOutStanding();
+            }
+        }
+
+        private void comboBox1_TextChanged(object sender, EventArgs e)
+        {
+            if(!string.IsNullOrEmpty(textBox2.Text))
+            {
+                ComputeOutStanding();
+            }
         }
     }
 }
