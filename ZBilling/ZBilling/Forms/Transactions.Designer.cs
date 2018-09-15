@@ -85,6 +85,7 @@
             this.label17 = new System.Windows.Forms.Label();
             this.comboBox4 = new System.Windows.Forms.ComboBox();
             this.label16 = new System.Windows.Forms.Label();
+            this.button6 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -103,6 +104,7 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.button6);
             this.groupBox1.Controls.Add(this.textBox13);
             this.groupBox1.Controls.Add(this.label21);
             this.groupBox1.Controls.Add(this.textBox6);
@@ -745,6 +747,18 @@
             this.label16.TabIndex = 3;
             this.label16.Text = "Year:";
             // 
+            // button6
+            // 
+            this.button6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button6.Enabled = false;
+            this.button6.Location = new System.Drawing.Point(775, 390);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(103, 23);
+            this.button6.TabIndex = 28;
+            this.button6.TabStop = false;
+            this.button6.Text = "Print Statement";
+            this.button6.UseVisualStyleBackColor = true;
+            // 
             // Transactions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -838,5 +852,6 @@
         private System.Windows.Forms.TextBox textBox13;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.Button button6;
     }
 }

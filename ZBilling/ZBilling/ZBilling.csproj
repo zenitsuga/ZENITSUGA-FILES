@@ -56,6 +56,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmBillingAccount.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,6 +86,12 @@
     <Compile Include="Forms\frmCustomerProfile.Designer.cs">
       <DependentUpon>frmCustomerProfile.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmDateConfiguration.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmDateConfiguration.Designer.cs">
+      <DependentUpon>frmDateConfiguration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FrmFetchRecords.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -92,6 +104,12 @@
     <Compile Include="Forms\frmLogin.Designer.cs">
       <DependentUpon>frmLogin.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmPayment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmPayment.Designer.cs">
+      <DependentUpon>frmPayment.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmRoomAssignment.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -103,6 +121,12 @@
     </Compile>
     <Compile Include="Forms\frmRooms.Designer.cs">
       <DependentUpon>frmRooms.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmSelectTenant.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmSelectTenant.Designer.cs">
+      <DependentUpon>frmSelectTenant.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmTenantProfile.cs">
       <SubType>Form</SubType>
@@ -151,6 +175,9 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmBillingAccount.resx">
       <DependentUpon>frmBillingAccount.cs</DependentUpon>
     </EmbeddedResource>
@@ -163,17 +190,26 @@
     <EmbeddedResource Include="Forms\frmCustomerProfile.resx">
       <DependentUpon>frmCustomerProfile.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmDateConfiguration.resx">
+      <DependentUpon>frmDateConfiguration.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmFetchRecords.resx">
       <DependentUpon>FrmFetchRecords.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmLogin.resx">
       <DependentUpon>frmLogin.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmPayment.resx">
+      <DependentUpon>frmPayment.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmRoomAssignment.resx">
       <DependentUpon>frmRoomAssignment.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmRooms.resx">
       <DependentUpon>frmRooms.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmSelectTenant.resx">
+      <DependentUpon>frmSelectTenant.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmTenantProfile.resx">
       <DependentUpon>frmTenantProfile.cs</DependentUpon>

@@ -130,5 +130,24 @@ namespace ZBilling.Forms
             }
             this.Close();
         }
+
+        private void dataGridView1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == 13)
+            {
+                //dataGridView1.CurrentCell = dataGridView1[0, dataGridView1.CurrentCell.RowIndex - 1];
+                dataGridView1.CurrentRow.Selected = true;
+
+                customerName = dataGridView1["Lastname", dataGridView1.CurrentCell.RowIndex].Value.ToString() + "," + dataGridView1["Firstname", dataGridView1.CurrentCell.RowIndex].Value.ToString();
+
+                DialogResult dr = MessageBox.Show("Are you sure you want to insert this customer?", "Transaction for " + customerName, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dr == DialogResult.Yes)
+                {
+                    CustomerType = radioButton1.Checked ? "Owner" : "Tenant";
+                    customerID = dataGridView1["sysid", dataGridView1.CurrentCell.RowIndex].Value.ToString();
+                }
+                this.Close();
+            }
+        }
     }
 }

@@ -427,6 +427,11 @@ namespace ZBilling
                 trans.Userlogin = tssUserlogin.Text;
                 trans.WindowState = FormWindowState.Maximized;
                 trans.Show();
+                if (!trans.isValidDueDate)
+                {
+                    MessageBox.Show("Error: Please check your current duedate setting before creating transaction.", "Due Date Lapse(Invalid)", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    trans.Close();
+                }
             }
         }
 
@@ -511,6 +516,30 @@ namespace ZBilling
                 cp.DBPath = DatabasePath;
                 cp.LoginUser = tssUserlogin.Text;
                 cp.Show();
+            }
+        }
+
+        private void dateConfigurationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (CheckAndLoadSettings())
+            {
+                frmDateConfiguration dc = new frmDateConfiguration();
+                dc.MdiParent = this;
+                dc.DBPath = DatabasePath;
+                dc.LoginUser = tssUserlogin.Text;
+                dc.Show();
+            }
+        }
+
+        private void tssPayment_Click(object sender, EventArgs e)
+        {
+            if (CheckAndLoadSettings())
+            {
+                frmPayment py = new frmPayment();
+                py.MdiParent = this;
+                py.DBPath = DatabasePath;
+                py.LoginUser = tssUserlogin.Text;
+                py.Show();
             }
         }
     }
