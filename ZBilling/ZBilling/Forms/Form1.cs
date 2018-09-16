@@ -15,6 +15,10 @@ namespace ZBilling.Forms
         public string DBPath;
         public string Amount;
 
+        public string AmountTendered;
+        public string PaymentMethod;
+        public bool IsPaid;
+
         clsFunctiion cf = new clsFunctiion();
 
         public Form1()
@@ -26,13 +30,14 @@ namespace ZBilling.Forms
         {
             try
             {
-                string Query = "select PaymentMethod from tblPaymentMethod where isActive = 1 order by PaymentMethod asc";
+                string Query = "select sysid,PaymentMethod from tblPaymentMethod where isActive = 1 order by PaymentMethod asc";
                 DataTable dtRecords = cf.GetRecords(Query);
 
                 if (dtRecords.Rows.Count > 0)
                 {
                     comboBox1.DataSource = dtRecords;
                     comboBox1.DisplayMember = "PaymentMethod";
+                    comboBox1.ValueMember = "sysid";
                 }
             }
             catch
@@ -49,19 +54,20 @@ namespace ZBilling.Forms
 
         private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (string.IsNullOrEmpty(textBox2.Text))
-            {
-                textBox2.Text = "0.00";
-            }
+
             if (e.KeyChar == 13)
             {
                 button1.PerformClick();
             }
-            if(!cf.isIntegerValid(e.KeyChar.ToString()) && e.KeyChar.ToString() != "." && e.KeyChar.ToString() != "\b")
+
+            if (!cf.isIntegerValid(e.KeyChar.ToString()) && e.KeyChar.ToString() != "." && e.KeyChar.ToString() != "\b")
             {
-                MessageBox.Show("Error: Please enter monetary value. ","Invalid Payment Value",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show("Error: Please enter monetary value. ", "Invalid Payment Value", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 textBox2.Text = string.Empty;
                 return;
+            }
+            else
+            {   
             }
             
         }
@@ -70,14 +76,57 @@ namespace ZBilling.Forms
         {
             try
             {
+                //if (string.IsNullOrEmpty(textBox2.Text))
+                //{
+                //    textBox2.Text = "0.00";
+                //}
                 if (textBox2.Text != string.Empty)
                 {
                     textBox3.Text = string.Format("{0:C}", double.Parse(textBox2.Text) - double.Parse(textBox1.Text)).Replace("$", "");
+                }
+                else
+                {
+                    textBox3.Text = string.Format("{0:C}", double.Parse("0.00") - double.Parse(textBox1.Text)).Replace("$", "");
                 }
             }
             catch
             {
             }
+        }
+
+        private void textBox2_Enter(object sender, EventArgs e)
+        {
+            if (textBox2.Text == "0.00")
+            {
+                textBox2.Text = string.Empty;
+            }
+        }
+
+        private void textBox2_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                if (textBox2.Text == string.Empty)
+                {
+                    textBox2.Text = "0.00";
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (textBox3.Text.Contains("("))
+            {
+                MessageBox.Show("Error: Cannot save payment. Please check your amount", "Payment Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            PaymentMethod = comboBox1.SelectedValue.ToString();
+            AmountTendered = string.Format("{0:C}", textBox2.Text).Replace("$", "");
+            IsPaid = true;
+            this.Close();
         }
     }
 }

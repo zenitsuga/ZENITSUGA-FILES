@@ -150,7 +150,7 @@ namespace ZBilling.Forms
             try
             {
                 string Query = "select t.sysid,t.DateTransaction,t.transactionNo,td.Description, " +
-                               " td.Amount,t.RoomID,td.Remarks,td.isPaid " +
+                               " td.Amount,t.RoomID,td.Remarks,case when td.isPaid = 0 then 'NO' else 'YES' end as 'Is Paid',td.PaymentRef as 'Reference' " +
                                " from tbltransactiondetails td " +
                                " left join tbltransaction t on td.ReferenceID = t.sysid " +
                                " where td.isPaid = 0 and t.RoomId =" + comboBox1.Text;
@@ -235,14 +235,47 @@ namespace ZBilling.Forms
 
         private void payTransactionToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
+            string AmountTendered = "0.00";
             if (tssTotalAmount.Text != "0.00" && tssBilledTo.Text != "N/A")
             {
-                Form1 f = new Form1();
-                //f.MdiParent = ZBilling.Form1.ActiveForm;
-                f.DBPath = DBPath;
-                f.Amount = tssTotalAmount.Text;
-                f.ShowDialog();
+                string PaymentCode = !string.IsNullOrEmpty(cf.GetLastID("tblPayment")) ? "PY" + DateTime.Now.Month.ToString().PadLeft(2,'0') + DateTime.Now.Year.ToString().PadLeft(2,'0') + DateTime.Now.Day.ToString().PadLeft(2,'0') +
+                    cf.GetLastID("tblPayment").ToString().PadLeft(6, '0') : string.Empty;
+
+                if (!string.IsNullOrEmpty(PaymentCode))
+                {
+                    Form1 f = new Form1();
+                    //f.MdiParent = ZBilling.Form1.ActiveForm;
+                    f.DBPath = DBPath;
+                    f.Amount = tssTotalAmount.Text;
+                    f.AmountTendered = AmountTendered;
+                    f.ShowDialog();
+                    string Remarks = "Pay:" + f.AmountTendered + " Change:" + (double.Parse(f.AmountTendered) - double.Parse(f.Amount)).ToString();
+                    string UserID = cf.GetSysID("tblUsers"," where username='" + LoginUser + "'").ToString();
+                    if (f.IsPaid)
+                    {
+                        string Query = "Insert into tblPayment(TransactionNo,PaymentMethod,Amount,Remarks,UserCreate)values("
+                            + "'" + PaymentCode + "'," + f.PaymentMethod + "," + f.Amount + ",'" + Remarks + "'," + UserID + ")";
+                        if (cf.ExecuteNonQuery(Query))
+                        {
+                            if (dataGridView2.Rows.Count > 0)
+                            {
+                                foreach (DataGridViewRow dgrv in dataGridView2.Rows)
+                                {
+                                    string SysID = dgrv.Cells["sysid"].Value.ToString();
+                                    string BillUpdate = "update tblTransactionDetails set isPaid = 1,PaymentRef='" + PaymentCode + "' where sysid =" + SysID;
+                                    cf.ExecuteNonQuery(BillUpdate);
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Error: Cannot continue payment process. Please check your Payment Record", "Payment Code invalid", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
+           
+           
         }
     }
 }

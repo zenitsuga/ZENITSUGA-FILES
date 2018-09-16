@@ -548,7 +548,7 @@ namespace ZBilling.Forms
                 string Query = "select b.AccountCode,* from tblTransactionDetails td " +
                                " Left Join tblTransaction t on td.ReferenceID = t.sysid " +
                                " Left Join tblBillingAccount b on td.Accounts = b.sysid " +
-                               " where t.DueDate between '" + DueDateStart + "' and '" + DueDateEnd + "' " + CustID;
+                               " where td.isPaid = 0 and t.DueDate between '" + DueDateStart + "' and '" + DueDateEnd + "' " + CustID;
                 DataTable dtResult = cf.GetRecords(Query);
                 if (dtResult.Rows.Count > 0)
                 {
@@ -585,22 +585,29 @@ namespace ZBilling.Forms
                     string DUECode = string.Empty;
                     DataTable dtRecords = cf.GetRecords("Select TOP 1 AccountCode from tblBillingAccount where isActive = 1 and Accounts = 'MonthlyDue' order by sysid desc");
                     DUECode = dtRecords.Rows[0]["AccountCode"] != null ? dtRecords.Rows[0]["AccountCode"].ToString() : "MODUE";
-                    string Amount = "0.00";
-                    DataRow drow = dtTransDetails.NewRow();
-                    drow[0] = TransactionID;
-                    drow[1] = DUECode;
-                    drow[2] = "Monthly Due for " + DateTime.Now.ToString("MMMM");
-                    cf.CheckMonthlyRate(comboBox1.Text, ref Amount);
-                    drow[3] = Amount;
-                    drow[4] = "Auto computed";
+                    string Description = "Monthly Due for " + DateTime.Now.ToString("MMMM") + " " + DateTime.Now.ToString("yyyy");
+                    string QueryModue = "Select * from tbltransactiondetails where description = '" + Description + "'";
+                    DataTable dtQuery = cf.GetRecords(QueryModue);
 
-                    if (Amount == "0.00")
+                    if (dtQuery.Rows.Count == 0)
                     {
-                        MessageBox.Show("Error: Amount Due is 0.00. Cannot saved the transaction. Please check", "Amount is 0.00", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
+                        string Amount = "0.00";
+                        DataRow drow = dtTransDetails.NewRow();
+                        drow[0] = TransactionID;
+                        drow[1] = DUECode;
+                        drow[2] = "Monthly Due for " + DateTime.Now.ToString("MMMM") + " " + DateTime.Now.ToString("yyyy");
+                        cf.CheckMonthlyRate(comboBox1.Text, ref Amount);
+                        drow[3] = Amount;
+                        drow[4] = "Auto computed";
 
-                    dtTransDetails.Rows.Add(drow);
+                        if (Amount == "0.00")
+                        {
+                            MessageBox.Show("Error: Amount Due is 0.00. Cannot saved the transaction. Please check", "Amount is 0.00", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+
+                        dtTransDetails.Rows.Add(drow);
+                    }
                     dataGridView1.DataSource = dtTransDetails;
                 }
             }
