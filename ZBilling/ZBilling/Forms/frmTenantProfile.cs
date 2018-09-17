@@ -32,7 +32,7 @@ namespace ZBilling.Forms
                 sr.DBPath = DBPath;
                 sr.TableName = "tblCustomerTenant";
                 sr.Criteria = " where isActive = 1";
-                sr.FieldOutput = "sysid,LastName,FirstName,MiddleName,Address,ContactNumber,(LastName + ',' + Firstname + MiddleName)as TagOutput";
+                sr.FieldOutput = "sysid,LastName,FirstName,MiddleName,Address,ContactNumber,(LastName + ',' + Firstname ++ ' ' +  MiddleName)as TagOutput";
                 sr.ShowDialog();
                 if (sr.Result != null)
                 {
@@ -99,7 +99,11 @@ namespace ZBilling.Forms
             {
                 ClearEntry();
                 //dataGridView1.DataSource = null;
-                string SQLStatement = "Select * from tblTenant where isActive = 1 order by LastName,FirstName asc"; cf.DbLocation = DBPath;
+                string SQLStatement = "Select  t.sysid,case when (isnull(c.Lastname,'') + ',' + isnull(c.Firstname,'')) = ',' " +
+                                      "then '' else (isnull(c.Lastname,'') + ',' + isnull(c.Firstname,'')) end as " +                                                               "'Owner',t.Lastname,t.firstname,t.Middlename,t.Address,t.ContactNumber from " +
+                                      " tblTenant t left join tblCustomerTenant c on t.OwnerID=c.sysid where t.isActive = 1 " +
+                                      " order by LastName,FirstName asc"; 
+                cf.DbLocation = DBPath;
                 DataTable dtRecords = cf.GetRecords(SQLStatement);
                 dataGridView1.DataSource = dtRecords;
                 dataGridView1.Refresh();
@@ -152,8 +156,9 @@ namespace ZBilling.Forms
             string sysID = "0";
             sysID = dataGridView1.SelectedRows[0].Cells[0].Value.ToString();
             lblTenantID.Text = sysID;
-            lblOwnerID.Text = dataGridView1.SelectedRows[0].Cells["OwnerID"].Value.ToString();
-            GetOwnerDetails(sysID);
+            lblOwnerID.Text = dataGridView1.SelectedRows[0].Cells["Owner"].Value.ToString();
+            //GetOwnerDetails(sysID);
+            textBox5.Text = dataGridView1.SelectedRows[0].Cells["Owner"].Value.ToString();
             textBox1.Text = dataGridView1.SelectedRows[0].Cells["LastName"].Value.ToString();
             textBox2.Text = dataGridView1.SelectedRows[0].Cells["FirstName"].Value.ToString();
             textBox3.Text = dataGridView1.SelectedRows[0].Cells["MiddleName"].Value.ToString();
@@ -166,8 +171,9 @@ namespace ZBilling.Forms
             string sysID = "0";
             sysID = dataGridView1.SelectedRows[0].Cells[0].Value.ToString();
             lblTenantID.Text = sysID;
-            lblOwnerID.Text = dataGridView1.SelectedRows[0].Cells["OwnerID"].Value.ToString();
-            GetOwnerDetails(lblOwnerID.Text);
+            lblOwnerID.Text = dataGridView1.SelectedRows[0].Cells["Owner"].Value.ToString();
+            //GetOwnerDetails(lblOwnerID.Text);
+            textBox5.Text = dataGridView1.SelectedRows[0].Cells["Owner"].Value.ToString();
             textBox1.Text = dataGridView1.SelectedRows[0].Cells["LastName"].Value.ToString();
             textBox2.Text = dataGridView1.SelectedRows[0].Cells["FirstName"].Value.ToString();
             textBox3.Text = dataGridView1.SelectedRows[0].Cells["MiddleName"].Value.ToString();

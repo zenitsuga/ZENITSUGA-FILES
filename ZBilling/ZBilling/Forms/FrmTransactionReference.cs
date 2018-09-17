@@ -44,6 +44,11 @@ namespace ZBilling.Forms
                 Query = "select sysid,lastname,firstname,middlename,address from " + TableName + " where isActive =1 order by lastname asc";
                 dtLoadTenant = cf.GetRecords(Query);
                 dvTenant = new DataView(dtLoadTenant);
+                comboBox1.Items.Clear();
+                comboBox1.Items.Add("lastname");
+                comboBox1.Items.Add("firstname");
+                comboBox1.Items.Add("middlename");
+                comboBox1.Items.Add("address");
             }
             catch
             {
@@ -98,6 +103,7 @@ namespace ZBilling.Forms
         {
             try
             {
+                string Filter = "Lastname ";
                 DataView dvFilter = new DataView();
                 if (radioButton1.Checked)
                 {
@@ -107,7 +113,10 @@ namespace ZBilling.Forms
                 {
                     dvFilter = dvTenant;
                 }
-                string Filter = "Lastname like '" + textBox1.Text + "%'";
+                if (comboBox1.Text != null)
+                {
+                   Filter = comboBox1.Text + " like '" + textBox1.Text + "%'";
+                }
                 dvFilter.RowFilter = Filter;
                 dataGridView1.DataSource = null;
                 dataGridView1.DataSource = dvFilter.ToTable();

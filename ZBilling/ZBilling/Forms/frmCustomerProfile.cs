@@ -266,7 +266,11 @@ namespace ZBilling.Forms
         {
             try
             {
-                string Query = "SELECT * FROM tblTenant where OwnerID = " + SysID + " order by lastname asc";
+                //string Query = "SELECT * FROM tblTenant where OwnerID = " + SysID + " order by lastname asc";
+                string Query = "Select  t.sysid,case when (isnull(c.Lastname,'') + ',' + isnull(c.Firstname,'')) = '' " +
+                               " then '' else (isnull(c.Lastname,'') + ',' + isnull(c.Firstname,'')) end as 'Owner', " +
+                               " t.Lastname,t.firstname,t.Middlename,t.Address,t.ContactNumber from tblTenant t  " +
+                               " left join tblCustomerTenant c on t.OwnerID=c.sysid where t.isActive = 1 and t.OwnerID="                                + SysID + " order by LastName,FirstName asc";
                 dtRecords = cf.GetRecords(Query);
                 dataGridView1.DataSource = null;
                 dataGridView1.DataSource = dtRecords;

@@ -222,6 +222,7 @@
             this.lblOwnerID.Size = new System.Drawing.Size(13, 13);
             this.lblOwnerID.TabIndex = 9;
             this.lblOwnerID.Text = "0";
+            this.lblOwnerID.Visible = false;
             // 
             // label8
             // 
@@ -231,6 +232,7 @@
             this.label8.Size = new System.Drawing.Size(21, 13);
             this.label8.TabIndex = 11;
             this.label8.Text = "ID:";
+            this.label8.Visible = false;
             // 
             // button2
             // 
@@ -340,12 +342,12 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.deleteRecordToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(148, 26);
             // 
             // deleteRecordToolStripMenuItem
             // 
             this.deleteRecordToolStripMenuItem.Name = "deleteRecordToolStripMenuItem";
-            this.deleteRecordToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.deleteRecordToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.deleteRecordToolStripMenuItem.Text = "Delete Record";
             this.deleteRecordToolStripMenuItem.Click += new System.EventHandler(this.deleteRecordToolStripMenuItem_Click);
             // 
