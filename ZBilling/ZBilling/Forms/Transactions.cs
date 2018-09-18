@@ -20,6 +20,8 @@ namespace ZBilling.Forms
         string customerType = string.Empty;
 
         DataTable dtTransDetails;
+        DataView dvTrans;
+
         int GetIDTransaction;
 
         bool formIsLoad;
@@ -131,7 +133,69 @@ namespace ZBilling.Forms
         private void Transactions_Load(object sender, EventArgs e)
         {
             isValidDueDate = false;
-            loadNewTrans(ref isValidDueDate);            
+            loadNewTrans(ref isValidDueDate);
+            DataTable dtResult = dtTransactionRecords();
+            if (dtResult.Rows.Count > 0)
+            {
+                dtDistinctRecord(dtResult, "DueDate",comboBox4,typeof(DateTime));
+                dvTrans = dtResult.DefaultView;        
+            }
+
+        }
+
+        private void dtDistinctRecord(DataTable dtRecords, string FilterField, ComboBox cb,Type type)
+        {   
+            try
+            {
+                cb.DataSource = null;
+                if(type.Name == "int")
+                {
+                var Test = (from row in dtRecords.AsEnumerable()
+                            select row.Field<int>(FilterField)).Distinct();
+                    if (Test.Count() > 0)
+                    {
+                        cb.Items.Clear();
+                        foreach (int strDR in Test)
+                        {
+                            cb.Items.Add(strDR);
+                        }
+                    }
+                }
+                else if (type.Name == "DateTime")
+                {
+                var Test = (from row in dtRecords.AsEnumerable()
+                            select row.Field<DateTime>(FilterField)).Distinct();
+                    if (Test.Count() > 0)
+                    {
+                        cb.Items.Clear();
+                        foreach (DateTime strDR in Test)
+                        {
+                            cb.Items.Add(strDR.ToString("yyyy"));
+                        }
+                    }
+                }
+
+                
+            }
+            catch
+            {
+            }
+        }
+
+        private DataTable dtTransactionRecords()
+        {
+            string Query = "Select t.transactionNo,t.RoomID,t.DueDate from tbltransactiondetails td " +
+                           " left join tbltransaction t on td.referenceID = t.sysid " +
+                           " where t.DueDate between '"+ textBox13.Text +"' and '"+ textBox13.Text +" 23:59:59' ";
+            DataTable dtResult = new DataTable();
+            try
+            {
+                dtResult = cf.GetRecords(Query);
+            }
+            catch
+            {
+            }
+            return dtResult;
         }
 
         private void loadNewTrans(ref bool isValidDueDate)
@@ -542,7 +606,7 @@ namespace ZBilling.Forms
                 {
                     DataTableDetails();
                 }
-                string CustID = string.IsNullOrEmpty(label11.Text) ? " and CustomerID = " + label11.Text : " and TenantID =" + label12.Text;   
+                string CustID = !string.IsNullOrEmpty(label11.Text) ? " and CustomerID = " + label11.Text : " and TenantID =" + label12.Text;   
                 DateTime DueDateStart = DateTime.Parse(DueDate);
                 DateTime DueDateEnd = DueDateStart;
                 string Query = "select b.AccountCode,* from tblTransactionDetails td " +
@@ -586,7 +650,9 @@ namespace ZBilling.Forms
                     DataTable dtRecords = cf.GetRecords("Select TOP 1 AccountCode from tblBillingAccount where isActive = 1 and Accounts = 'MonthlyDue' order by sysid desc");
                     DUECode = dtRecords.Rows[0]["AccountCode"] != null ? dtRecords.Rows[0]["AccountCode"].ToString() : "MODUE";
                     string Description = "Monthly Due for " + DateTime.Now.ToString("MMMM") + " " + DateTime.Now.ToString("yyyy");
-                    string QueryModue = "Select * from tbltransactiondetails where description = '" + Description + "'";
+                    string QueryModue = "Select td.* from tbltransactiondetails td " +
+                                        " left join tbltransaction t on td.referenceID = t.sysid " + 
+                                        " where t.roomid = "+ comboBox1.Text +" and  td.description = '" + Description + "'";
                     DataTable dtQuery = cf.GetRecords(QueryModue);
 
                     if (dtQuery.Rows.Count == 0)
@@ -853,11 +919,11 @@ namespace ZBilling.Forms
             {
                 string duedate = textBox13.Text;
                 string CustID = label11.Text != "0" ? " and CustomerID=" + label11.Text: string.Empty;
-                CustID = label12.Text != "0" ? " and TenantID=" + label12.Text : string.Empty;
+                CustID = label12.Text != "0" ? " and TenantID=" + label12.Text : CustID;
 
                 if (CheckExistTranasactionDueDate(duedate, comboBox1.Text, CustID))
                 {
-                    string Query = "select * from tbltransaction where duedate = '" + textBox13.Text + "' and roomID = 101 " + (string.IsNullOrEmpty(CustID) ? string.Empty : CustID);
+                    string Query = "select * from tbltransaction where duedate = '" + textBox13.Text + "' and roomID = " + comboBox1.Text + (string.IsNullOrEmpty(CustID) ? string.Empty : CustID);
                     DataTable dtRecords = cf.GetRecords(Query);
                     if (dtRecords.Rows.Count > 0)
                     {
@@ -931,6 +997,15 @@ namespace ZBilling.Forms
             {
                 ComputeOutStanding();
             }
+        }
+
+        private void comboBox4_SelectedValueChanged(object sender, EventArgs e)
+        {
+            DateTime dtParseStart = DateTime.Parse(comboBox4.Text + "/01/01");
+            DateTime dtParseEnd = DateTime.Parse(comboBox4.Text + "/12/31");
+            dvTrans.RowFilter = " DueDate > #" + dtParseStart.ToString("MM/dd/yyyy") + "# and DueDate < #" + dtParseEnd.ToString("MM/dd/yyyy") + "#" ;
+            dataGridView3.DataSource = dvTrans.ToTable();
+            dataGridView3.Columns["DueDate"].Visible = false;
         }
     }
 }

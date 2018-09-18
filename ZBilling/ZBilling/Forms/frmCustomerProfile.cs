@@ -163,6 +163,7 @@ namespace ZBilling.Forms
             }
             SaveCustomerInfo();
             lblIDNumber.Text = GetCustomerID(textBox1.Text + "_" + textBox2.Text).ToString();
+            textBox1.Focus();
         }
 
         private void comboBox1_SelectedValueChanged(object sender, EventArgs e)
@@ -214,6 +215,14 @@ namespace ZBilling.Forms
                     if (dvCustomer.ToTable().Rows.Count == 0)
                     {
                         dvCustomer.RowFilter = "MiddleName LIKE '" + textBox5.Text + "%'";
+                        if (dvCustomer.ToTable().Rows.Count == 0)
+                        {
+                            dvCustomer.RowFilter = "Address LIKE '" + textBox5.Text + "%'";
+                            if (dvCustomer.ToTable().Rows.Count == 0)
+                            {
+                                dvCustomer.RowFilter = null;
+                            }
+                        }
                     }
                 }
                 dataGridView2.DataSource = null;
@@ -326,6 +335,35 @@ namespace ZBilling.Forms
                         break;
                 }
             }
+        }
+
+        private void dataGridView2_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                foreach (DataGridViewRow dgr in dataGridView2.SelectedRows)
+                {
+                    lblIDNumber.Text = dgr.Cells[0].Value.ToString();
+                    textBox1.Text = dgr.Cells[1].Value.ToString();
+                    textBox2.Text = dgr.Cells[2].Value.ToString();
+                    textBox4.Text = dgr.Cells[3].Value.ToString();
+                    textBox3.Text = dgr.Cells[4].Value.ToString();
+                    textBox6.Text = dgr.Cells[5].Value.ToString();
+                    //LoadRoomAssignment(lblIDNumber.Text);
+                }
+                dataGridView2.Rows[dataGridView2.SelectedRows[0].Index].Selected = true;                
+            }
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            lblIDNumber.Text = "0";
+            textBox1.Text = string.Empty;
+            textBox2.Text = string.Empty;
+            textBox3.Text = string.Empty;
+            textBox4.Text = string.Empty;
+            textBox6.Text = string.Empty;
+            textBox1.Focus();
         }
     }
 }

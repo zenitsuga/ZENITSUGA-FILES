@@ -54,6 +54,7 @@ namespace ZBilling.Forms
         private void button3_Click(object sender, EventArgs e)
         {
             SaveTenantInfo();
+            textBox1.Focus();
         }
         public void SaveTenantInfo()
         {
@@ -215,6 +216,12 @@ namespace ZBilling.Forms
             catch
             {
             }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            ClearEntry();
+            textBox1.Focus();
         }
     }
 }
