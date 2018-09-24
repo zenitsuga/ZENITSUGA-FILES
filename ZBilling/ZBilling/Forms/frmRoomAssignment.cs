@@ -104,12 +104,15 @@ namespace ZBilling.Forms
                 filterID = radioButton2.Checked ? "t.sysid" : "c.sysid";
                 dataGridView1.DataSource = null;
                 string SQLStatement =" SELECT r.RoomNumber, " +
-                                     "case when ((isnull(c.LastName,'') + ',' + isnull(c.FirstName,''))) = ',' then '' else (isnull(c.LastName,'') + ',' + isnull(c.FirstName,'')) end as OwnerName, " +
+                                     "case when ((isnull(c.LastName,'') + ',' + isnull(c.FirstName,''))) = ',' then "+
+                                     "(isnull(ct.LastName,'') + ',' + isnull(ct.FirstName,'')) " +
+                                     " else (isnull(c.LastName,'') + ',' + isnull(c.FirstName,'')) end as OwnerName, " +
                                      "case when ((isnull(t.LastName,'') + ',' + isnull(t.FirstName,''))) = ',' then '' else (isnull(t.LastName,'') + ',' + isnull(t.FirstName,'')) end as TenantName,  " +
                                      "r.dateTransferred " +
                                      "from tblRoomAssignment r " + 
                                      "left join tblCustomerTenant c on r.CustomerID = c.sysid " + 
                                      "left join tblTenant t on r.TenantID = t.sysid " +
+                                     "left join tblCustomerTenant ct on t.OwnerID = ct.sysid " +
                                      "where r.isActive = 1 " +  (string.IsNullOrEmpty(SysID) ? "":" and " + filterID + "=" +SysID);
                 cf.DbLocation = DBPath;
                 DataTable dtResult = cf.GetRecords(SQLStatement);

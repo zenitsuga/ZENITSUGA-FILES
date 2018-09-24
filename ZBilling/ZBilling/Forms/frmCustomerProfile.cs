@@ -163,6 +163,8 @@ namespace ZBilling.Forms
             }
             SaveCustomerInfo();
             lblIDNumber.Text = GetCustomerID(textBox1.Text + "_" + textBox2.Text).ToString();
+            dataGridView1.DataSource = null;
+            dataGridView2.DataSource = null;
             textBox1.Focus();
         }
 
@@ -220,7 +222,15 @@ namespace ZBilling.Forms
                             dvCustomer.RowFilter = "Address LIKE '" + textBox5.Text + "%'";
                             if (dvCustomer.ToTable().Rows.Count == 0)
                             {
-                                dvCustomer.RowFilter = null;
+                                dvCustomer.RowFilter = "ContactNumber LIKE '" + textBox5.Text + "%'";
+                                if (dvCustomer.ToTable().Rows.Count == 0)
+                                {
+                                    dvCustomer.RowFilter = "isActive LIKE '" + textBox5.Text + "%'";
+                                    if (dvCustomer.ToTable().Rows.Count == 0)
+                                    {
+                                        dvCustomer.RowFilter = null;
+                                    }
+                                }
                             }
                         }
                     }
@@ -363,6 +373,8 @@ namespace ZBilling.Forms
             textBox3.Text = string.Empty;
             textBox4.Text = string.Empty;
             textBox6.Text = string.Empty;
+            dataGridView1.DataSource = null;
+            dataGridView2.DataSource = null;
             textBox1.Focus();
         }
     }

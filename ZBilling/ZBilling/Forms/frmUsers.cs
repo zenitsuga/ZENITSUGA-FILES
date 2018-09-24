@@ -14,6 +14,8 @@ namespace ZBilling.Forms
         clsFunctiion cf = new clsFunctiion();
         public string DBPath;
 
+        DataView dvRecords;
+
         public frmUsers()
         {
             InitializeComponent();
@@ -163,11 +165,11 @@ namespace ZBilling.Forms
                 DataTable dtLoadUser = new DataTable();
                 cf.DbLocation = DBPath;
                 dtLoadUser = cf.RetrieveRecords("tblUsers", "*", " isActive = 1", " Username Asc", "");
-
+                dvRecords = dtLoadUser.DefaultView;
                 dataGridView1.Refresh();
                 if (dtLoadUser.Rows.Count > 0)
                 {
-                    dataGridView1.DataSource = dtLoadUser;
+                    dataGridView1.DataSource = dvRecords;
                     dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 }
             }
@@ -180,6 +182,23 @@ namespace ZBilling.Forms
         private void button3_Click(object sender, EventArgs e)
         {
             DeleteRecords();
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+            try{
+                if (!string.IsNullOrEmpty(textBox3.Text))
+                {
+                    dvRecords.RowFilter = "Username like '" + textBox3.Text + "%'";
+                }
+                else
+                {
+                    dvRecords.RowFilter = null;
+                }
+                dataGridView1.DataSource = dvRecords;
+            }catch
+            {
+            }
         }
 
     }
