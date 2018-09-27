@@ -208,35 +208,44 @@ namespace ZBilling.Forms
 
         private void textBox5_TextChanged(object sender, EventArgs e)
         {
-            if (dvCustomer.ToTable().Rows.Count > 0)
-            {
-                dvCustomer.RowFilter = "LastName LIKE '" + textBox5.Text + "%'";
-                if (dvCustomer.ToTable().Rows.Count == 0)
+            try{
+                if (dvCustomer.ToTable().Rows.Count > 0)
                 {
-                    dvCustomer.RowFilter = "FirstName LIKE '" + textBox5.Text + "%'";
+                    dvCustomer.RowFilter = "LastName LIKE '" + textBox5.Text + "%'";
                     if (dvCustomer.ToTable().Rows.Count == 0)
                     {
-                        dvCustomer.RowFilter = "MiddleName LIKE '" + textBox5.Text + "%'";
+                        dvCustomer.RowFilter = "FirstName LIKE '" + textBox5.Text + "%'";
                         if (dvCustomer.ToTable().Rows.Count == 0)
                         {
-                            dvCustomer.RowFilter = "Address LIKE '" + textBox5.Text + "%'";
+                            dvCustomer.RowFilter = "MiddleName LIKE '" + textBox5.Text + "%'";
                             if (dvCustomer.ToTable().Rows.Count == 0)
                             {
-                                dvCustomer.RowFilter = "ContactNumber LIKE '" + textBox5.Text + "%'";
+                                dvCustomer.RowFilter = "Address LIKE '" + textBox5.Text + "%'";
                                 if (dvCustomer.ToTable().Rows.Count == 0)
                                 {
-                                    dvCustomer.RowFilter = "isActive LIKE '" + textBox5.Text + "%'";
+                                    dvCustomer.RowFilter = "ContactNumber LIKE '" + textBox5.Text + "%'";
                                     if (dvCustomer.ToTable().Rows.Count == 0)
                                     {
-                                        dvCustomer.RowFilter = null;
+                                        dvCustomer.RowFilter = "isActive = " + textBox5.Text;
+                                        if (dvCustomer.ToTable().Rows.Count == 0)
+                                        {
+                                            dvCustomer.RowFilter = null;
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+                    dataGridView2.DataSource = null;
+                    dataGridView2.DataSource = dvCustomer;
                 }
-                dataGridView2.DataSource = null;
-                dataGridView2.DataSource = dvCustomer;
+                else
+                {
+                    LoadCustomerInfo();
+                }
+            }
+            catch
+            {
             }
         }
 

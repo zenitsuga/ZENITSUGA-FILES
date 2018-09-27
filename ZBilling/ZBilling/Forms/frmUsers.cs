@@ -63,6 +63,7 @@ namespace ZBilling.Forms
                 InsertRecords();
             }
             LoadRecords();
+            label8.Text = "0";
         }
 
         private void DeleteRecords()
@@ -97,6 +98,7 @@ namespace ZBilling.Forms
             {
                 MessageBox.Show("Error:" + ex.Message.ToString(), "Unexpected Error on Deleting Record: tblUser", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            label8.Text = "0";
         }
         private void UpdateRecords()
         {
@@ -108,10 +110,11 @@ namespace ZBilling.Forms
 
                 SV.Add("Username = '" + textBox1.Text + "'");
                 SV.Add("Password = '" + textBox2.Text + "'");
+                SV.Add("Fullname = '" + textBox4.Text + "'");
                 SV.Add("Role = " + (checkBox1.Checked ? "1" : "0"));
-                SV.Add("AllowUserAccess = " + (checkBox2.Checked ? "1" : "0"));
+                SV.Add("AllowAccessUser = " + (checkBox2.Checked ? "1" : "0"));
 
-                Criteria = "sysID=" + dataGridView1.SelectedRows[0].Cells["sysID"].Value.ToString();
+                Criteria = "where sysID=" + dataGridView1.SelectedRows[0].Cells["sysID"].Value.ToString();
 
                 if (!cf.UpdateRecords("tblUsers",SV,Criteria))
                 {
@@ -119,7 +122,7 @@ namespace ZBilling.Forms
                 }
                 MessageBox.Show("Done", "Save Record : Users", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 textBox1.Text = string.Empty;
-
+                label8.Text = "0";
             }
             catch
             {
@@ -134,13 +137,14 @@ namespace ZBilling.Forms
                 List<string> FC = new List<string>();
                 FC.Add("Username");
                 FC.Add("Password");
+                FC.Add("Fullname");
                 FC.Add("Role");
                 FC.Add("isActive");
                 FC.Add("AllowAccessUser");
                 List<string> FV = new List<string>();
                 FV.Add(textBox1.Text);
                 FV.Add(textBox2.Text);
-                
+                FV.Add(textBox4.Text);
                 List<string> FI = new List<string>();
                 int UserRole = cf.GetSysID("tblUserRole", " where Role='" + comboBox1.Text + "'");
                 FI.Add(UserRole.ToString());
@@ -197,6 +201,20 @@ namespace ZBilling.Forms
                 }
                 dataGridView1.DataSource = dvRecords;
             }catch
+            {
+            }
+        }
+
+        private void dataGridView1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                label8.Text = dataGridView1["sysid", dataGridView1.CurrentCell.RowIndex].Value.ToString();
+                textBox1.Text = dataGridView1["username", dataGridView1.CurrentCell.RowIndex].Value.ToString();
+                textBox2.Text = dataGridView1["password", dataGridView1.CurrentCell.RowIndex].Value.ToString();
+                textBox4.Text = dataGridView1["fullname", dataGridView1.CurrentCell.RowIndex].Value.ToString();
+            }
+            catch
             {
             }
         }

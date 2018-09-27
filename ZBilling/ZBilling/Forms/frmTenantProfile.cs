@@ -15,6 +15,8 @@ namespace ZBilling.Forms
         public string DBPath;
         public string LoginUser;
 
+        DataView dvRecords;
+
         public frmTenantProfile()
         {
             InitializeComponent();
@@ -99,6 +101,7 @@ namespace ZBilling.Forms
             try
             {
                 ClearEntry();
+                
                 //dataGridView1.DataSource = null;
                 string SQLStatement = "Select  t.sysid,case when (isnull(c.Lastname,'') + ',' + isnull(c.Firstname,'')) = ',' " +
                                       "then '' else (isnull(c.Lastname,'') + ',' + isnull(c.Firstname,'')) end as " +                                                               "'Owner',t.Lastname,t.firstname,t.Middlename,t.Address,t.ContactNumber from " +
@@ -106,6 +109,7 @@ namespace ZBilling.Forms
                                       " order by LastName,FirstName asc"; 
                 cf.DbLocation = DBPath;
                 DataTable dtRecords = cf.GetRecords(SQLStatement);
+                dvRecords = new DataView(dtRecords);
                 dataGridView1.DataSource = dtRecords;
                 dataGridView1.Refresh();
             }
@@ -222,6 +226,25 @@ namespace ZBilling.Forms
         {
             ClearEntry();
             textBox1.Focus();
+        }
+
+        private void textBox7_TextChanged(object sender, EventArgs e)
+        {
+            if (textBox7.Text != string.Empty)
+            {
+                if (!string.IsNullOrEmpty(comboBox1.Text))
+                {
+                    if (dvRecords.ToTable().Rows.Count > 0)
+                    {
+                        dvRecords.RowFilter = comboBox1.Text + " Like '" + textBox7.Text + "%'";
+                    }
+                }
+            }
+            else
+            {
+                dvRecords.RowFilter = null;
+            }
+            dataGridView1.DataSource = dvRecords;
         }
     }
 }

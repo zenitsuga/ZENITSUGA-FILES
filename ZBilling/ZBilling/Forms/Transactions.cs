@@ -61,8 +61,10 @@ namespace ZBilling.Forms
                 DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
 
                 string PrevBillCode = string.Empty;
+                string PDueInterest = string.Empty;
                 DataTable dtRecords = cf.GetRecords("Select TOP 1 AccountCode from tblBillingAccount where isActive = 1 and Accounts = 'UnpaidDue' order by sysid desc");
                 PrevBillCode = dtRecords.Rows[0]["AccountCode"] != null ? dtRecords.Rows[0]["AccountCode"].ToString() : "PREVDUE";
+                PDueInterest = "IMRDUE";
 
                 string Query = "select * from tblTransactionDetails td " +
                                " inner join tblTransaction t on td.ReferenceID = t.sysid " +
@@ -83,12 +85,40 @@ namespace ZBilling.Forms
                         drow["Amount"] = string.Format("{0:C}", double.Parse(dr["Amount"].ToString())).Replace("$", "");
                         drow["Remarks"] = "Auto computed";
                         dtTransDetails.Rows.Add(drow);
+                        //---- Interest Due
+                        DataRow drowID = dtTransDetails.NewRow();
+                        drowID["ReferenceID"] = dr["TransactionNo"].ToString();
+                        drowID["Accounts"] = PDueInterest;
+                        drowID["Description"] = "Interest (" + getInterestRate() + ") : " + (dr["Description"].ToString().Contains("Unpaid") ? dr["Description"].ToString() : "(Unpaid) " + dr["Description"].ToString());
+                        double IntAmount = double.Parse(dr["Amount"].ToString()) * getInterestRate();
+                        drowID["Amount"] = string.Format("{0:C}", IntAmount).Replace("$", "");
+                        drowID["Remarks"] = "Auto computed";
+                        dtTransDetails.Rows.Add(drowID);
                     }
                 }
             }
             catch
             {
             }
+        }
+
+        private double getInterestRate()
+        {
+            double result = 0;
+            try
+            {
+                string Query = "select top 1 isnull(MonthlyInterestRate,0) as MIR from tblsettings where isActive = 1 order by sysid desc";
+                DataTable dtresult = cf.GetRecords(Query);
+                if (dtresult.Rows.Count > 0)
+                {
+                    result = double.Parse(dtresult.Rows[0][0].ToString());
+                }
+            }
+            catch
+            {
+
+            }
+            return result;
         }
 
         private void ComputeSummary()
@@ -681,6 +711,16 @@ namespace ZBilling.Forms
                         }
 
                         dtTransDetails.Rows.Add(drow);
+
+                        string PDAmount = "0.00";
+                        DataRow PDdrow = dtTransDetails.NewRow();
+                        PDdrow[0] = TransactionID;
+                        PDdrow[1] = DUECode;
+                        PDdrow[2] = "Interest Monthly Due for " + DateTime.Now.ToString("MMMM") + " " + DateTime.Now.ToString("yyyy");
+                        cf.CheckMonthlyRate(comboBox1.Text, ref Amount);
+                        PDdrow[3] = Amount;
+                        PDdrow[4] = "Auto computed";
+
                     }
                     dataGridView1.DataSource = dtTransDetails;
                 }

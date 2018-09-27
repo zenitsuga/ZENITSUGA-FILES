@@ -425,7 +425,7 @@ namespace ZBilling.Class
 
                     SV = SV.Substring(0, SV.Length - 1);
 
-                    string Query = "UPDATE TABLE " + TableName + " SET " + SV + Criteria;
+                    string Query = "UPDATE " + TableName + " SET " + SV + " " + Criteria;
 
                     db.DBPath = DbLocation;
                     result = db.ExecuteNonQuery(Query);

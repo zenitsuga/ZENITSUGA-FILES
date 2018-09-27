@@ -56,6 +56,8 @@ namespace ZBilling.Forms
                         textBox6.Text = dtrecords.Rows[0]["TransEndDate"].ToString();
                     }
                     label5.Text = dtrecords.Rows[0]["sysid"].ToString();
+                    textBox7.Text = dtrecords.Rows[0]["monthlyinterestrate"].ToString();
+                    label9.Text = label5.Text;
                 }
             }
             catch
@@ -71,6 +73,22 @@ namespace ZBilling.Forms
         private void frmDateConfiguration_Load(object sender, EventArgs e)
         {
             LoadRecords();
+        }
+
+        private void LoadInterestRateHistory()
+        {
+            try
+            {
+                string Query = "select a.Module,a.Description,u.Lastname,u.Firstname,a.isActive from tblAuditTrail a left join tblUsers u on a.UserID = u.sysid order by a.sysid desc";
+                DataTable dtRecords = cf.GetRecords(Query);
+                if (dtRecords.Rows.Count > 0)
+                {
+                    dataGridView1.DataSource = dtRecords;
+                }
+            }
+            catch
+            {
+            }
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -139,6 +157,27 @@ namespace ZBilling.Forms
             }
             catch
             {
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (!cf.isIntegerValid(textBox7.Text.Replace(".", "")))
+            {
+                MessageBox.Show("Failed to update the Monthly Interest Rate. Please check your value", "Unable to update", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            if (!string.IsNullOrEmpty(textBox7.Text))
+            {
+                string Query = "Update tblSettings set monthlyinterestrate = "+ textBox7.Text +" where isActive = 1 and sysid = " + label9.Text;
+                if (!cf.ExecuteNonQuery(Query))
+                {
+                    MessageBox.Show("Failed to update the Monthly Interest Rate. Please check your data", "Unable to update", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                else
+                {
+                    MessageBox.Show("Done", "Update sucessfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
         }
     }
