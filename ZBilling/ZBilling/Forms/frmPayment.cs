@@ -94,14 +94,14 @@ namespace ZBilling.Forms
             }
         }
 
-        private string GetBilledCustomer(string ID)
+        private string GetBilledCustomer(string ID,string CustType)
         {
             string Result = "N/A";
             try
             {
                 string TableName = string.Empty;
-                TableName = radioButton1.Checked  ? "tblCustomerTenant" : "tblTenant";
-                TableName = "tblTenant";
+                TableName = CustType == "CustomerID" ? "tblCustomerTenant" : "tblTenant";
+                //TableName = "tblTenant";
                 string Query = "Select LastName + ',' + FirstName + ' ' + MiddleName from "+ TableName +" where sysID=" + ID;
                 Result = cf.GetRecords(Query).Rows[0][0].ToString();
                 tssBilledTo.Text = Result;
@@ -113,7 +113,7 @@ namespace ZBilling.Forms
         }
 
         private void dataGridView1_KeyPress(object sender, KeyPressEventArgs e)
-        {
+        {   
             ClearMe();
             string CustID = "0";
             string CustType = string.Empty;
@@ -126,13 +126,29 @@ namespace ZBilling.Forms
                 dataGridView1.CurrentRow.Selected = true;
                 if (radioButton1.Checked)
                 {
-                    frmSelectTenant st = new frmSelectTenant();
-                    st.DBPath = DBPath;
-                    st.OwnerID = dataGridView1[0, dataGridView1.CurrentCell.RowIndex].Value.ToString();
-                    st.ShowDialog();
-                    CustType = "TenantID";
-                    CustID = st.SelectedTenantID;
-
+                    if(cf.isIntegerValid(dataGridView1[0, dataGridView1.CurrentCell.RowIndex].Value.ToString()))
+                    {
+                        int sysid = int.Parse(dataGridView1[0, dataGridView1.CurrentCell.RowIndex].Value.ToString());
+                        DataTable dtRecords = cf.GetRecords("Select RoomNumber from tblRoomAssignment where CustomerID =" + sysid);
+                        if (dtRecords.Rows.Count > 0)
+                        {
+                           DialogResult dr = MessageBox.Show("The Customer you choose is Owner. Would you like to check the billing for this customer?", "Owner Found", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                           if (dr == DialogResult.Yes)
+                           {
+                               CustType = "CustomerID";
+                               CustID = dataGridView1[0, dataGridView1.CurrentCell.RowIndex].Value.ToString();
+                           }
+                           else
+                           {
+                               frmSelectTenant st = new frmSelectTenant();
+                               st.DBPath = DBPath;
+                               st.OwnerID = dataGridView1[0, dataGridView1.CurrentCell.RowIndex].Value.ToString();
+                               st.ShowDialog();
+                               CustType = "TenantID";
+                               CustID = st.SelectedTenantID;
+                           }
+                        }
+                    }
                 }
                 else
                 {
@@ -141,7 +157,7 @@ namespace ZBilling.Forms
                 }
                 comboBox1.DataSource = cf.GetRecords("Select RoomNumber from tblRoomAssignment where " + CustType + " =" + CustID);
                 comboBox1.DisplayMember = "RoomNumber";
-                GetBilledCustomer(CustID);
+                GetBilledCustomer(CustID,CustType);
             }
         }
 
@@ -200,14 +216,33 @@ namespace ZBilling.Forms
 
                     //dataGridView1.CurrentCell = dataGridView1[0, dataGridView1.CurrentCell.RowIndex - 1];
                     dataGridView1.CurrentRow.Selected = true;
+                    
                     if (radioButton1.Checked)
                     {
-                        frmSelectTenant st = new frmSelectTenant();
-                        st.DBPath = DBPath;
-                        st.OwnerID = dataGridView1[0, dataGridView1.CurrentCell.RowIndex].Value.ToString();
-                        st.ShowDialog();
-                        CustType = "TenantID";
-                        CustID = st.SelectedTenantID;
+                        if (cf.isIntegerValid(dataGridView1[0, dataGridView1.CurrentCell.RowIndex].Value.ToString()))
+                        {
+                            int sysid = int.Parse(dataGridView1[0, dataGridView1.CurrentCell.RowIndex].Value.ToString());
+                            DataTable dtRecords = cf.GetRecords("Select RoomNumber from tblRoomAssignment where CustomerID =" + sysid);
+                            if (dtRecords.Rows.Count > 0)
+                            {
+                                DialogResult dr = MessageBox.Show("The Customer you choose is Owner. Would you like to check the billing for this customer?", "Owner Found", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                                if (dr == DialogResult.Yes)
+                                {
+                                    CustType = "CustomerID";
+                                    CustID = dataGridView1[0, dataGridView1.CurrentCell.RowIndex].Value.ToString();
+                                }
+                                else
+                                {
+
+                                    frmSelectTenant st = new frmSelectTenant();
+                                    st.DBPath = DBPath;
+                                    st.OwnerID = dataGridView1[0, dataGridView1.CurrentCell.RowIndex].Value.ToString();
+                                    st.ShowDialog();
+                                    CustType = "TenantID";
+                                    CustID = st.SelectedTenantID;
+                                }
+                            }
+                        }
                     }
                     else
                     {
@@ -216,7 +251,7 @@ namespace ZBilling.Forms
                     }
                     comboBox1.DataSource = cf.GetRecords("Select RoomNumber from tblRoomAssignment where " + CustType + " =" + CustID);
                     comboBox1.DisplayMember = "RoomNumber";
-                    GetBilledCustomer(CustID);
+                    GetBilledCustomer(CustID,CustType);
             }
             catch
             {

@@ -163,8 +163,8 @@ namespace ZBilling.Forms
             }
             SaveCustomerInfo();
             lblIDNumber.Text = GetCustomerID(textBox1.Text + "_" + textBox2.Text).ToString();
-            dataGridView1.DataSource = null;
-            dataGridView2.DataSource = null;
+            //dataGridView1.DataSource = null;
+            //dataGridView2.DataSource = null;
             textBox1.Focus();
         }
 

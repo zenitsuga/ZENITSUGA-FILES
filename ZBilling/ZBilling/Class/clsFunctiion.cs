@@ -579,6 +579,23 @@ namespace ZBilling.Class
             }
             return result;
         }
+        public bool isOwner(int sysid)
+        {
+            bool result = false;
+            try
+            {
+                string Query = "Select * from tblCustomerTenant where sysid = " + sysid;
+                DataTable dtRecords = GetRecords(Query);
+                if (dtRecords.Rows.Count > 0)
+                {
+                    result = true;
+                }
+            }
+            catch
+            {
+            }
+            return result;
+        }
         public int CheckCustomer(string CustomerName)
         {
             int result = 0;

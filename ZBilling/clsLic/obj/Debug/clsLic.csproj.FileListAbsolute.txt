@@ -4,6 +4,5 @@ C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\clsLic\obj\Debug\cls
 C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\clsLic\obj\Debug\clsLic.pdb
 E:\ZENITSUGA FILES\ZBilling\clsLic\bin\Debug\clsLic.dll
 E:\ZENITSUGA FILES\ZBilling\clsLic\bin\Debug\clsLic.pdb
-E:\ZENITSUGA FILES\ZBilling\clsLic\obj\Debug\clsLic.csprojResolveAssemblyReference.cache
 E:\ZENITSUGA FILES\ZBilling\clsLic\obj\Debug\clsLic.dll
 E:\ZENITSUGA FILES\ZBilling\clsLic\obj\Debug\clsLic.pdb
