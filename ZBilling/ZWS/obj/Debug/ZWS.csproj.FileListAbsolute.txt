@@ -15,6 +15,5 @@ E:\ZENITSUGA FILES\ZBilling\ZWS\bin\Web.Release.config
 E:\ZENITSUGA FILES\ZBilling\ZWS\bin\ZenitsugaServices.asmx.cs
 E:\ZENITSUGA FILES\ZBilling\ZWS\bin\ZWS.dll
 E:\ZENITSUGA FILES\ZBilling\ZWS\bin\ZWS.pdb
-E:\ZENITSUGA FILES\ZBilling\ZWS\obj\Debug\ZWS.csprojResolveAssemblyReference.cache
 E:\ZENITSUGA FILES\ZBilling\ZWS\obj\Debug\ZWS.dll
 E:\ZENITSUGA FILES\ZBilling\ZWS\obj\Debug\ZWS.pdb

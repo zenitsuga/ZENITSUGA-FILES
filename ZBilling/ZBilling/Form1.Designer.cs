@@ -62,6 +62,7 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.tssTransaction = new System.Windows.Forms.ToolStripButton();
+            this.tssPayment = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.tssManageDB = new System.Windows.Forms.ToolStripSplitButton();
@@ -72,10 +73,10 @@
             this.chartOfAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.roomsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.roomAssignmentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dateConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.tmrToday = new System.Windows.Forms.Timer(this.components);
-            this.dateConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tssPayment = new System.Windows.Forms.ToolStripButton();
+            this.Reports = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -309,6 +310,7 @@
             this.toolStripButton1,
             this.tssTransaction,
             this.tssPayment,
+            this.Reports,
             this.toolStripButton2,
             this.toolStripButton4,
             this.tssManageDB,
@@ -342,6 +344,17 @@
             this.tssTransaction.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.tssTransaction.Visible = false;
             this.tssTransaction.Click += new System.EventHandler(this.tssTransaction_Click);
+            // 
+            // tssPayment
+            // 
+            this.tssPayment.Image = ((System.Drawing.Image)(resources.GetObject("tssPayment.Image")));
+            this.tssPayment.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tssPayment.Name = "tssPayment";
+            this.tssPayment.Size = new System.Drawing.Size(58, 69);
+            this.tssPayment.Text = "Payment";
+            this.tssPayment.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tssPayment.Visible = false;
+            this.tssPayment.Click += new System.EventHandler(this.tssPayment_Click);
             // 
             // toolStripButton2
             // 
@@ -385,7 +398,7 @@
             // 
             this.userRoleToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("userRoleToolStripMenuItem.Image")));
             this.userRoleToolStripMenuItem.Name = "userRoleToolStripMenuItem";
-            this.userRoleToolStripMenuItem.Size = new System.Drawing.Size(209, 56);
+            this.userRoleToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.userRoleToolStripMenuItem.Text = "User Role";
             this.userRoleToolStripMenuItem.Click += new System.EventHandler(this.userRoleToolStripMenuItem_Click);
             // 
@@ -393,7 +406,7 @@
             // 
             this.usersToolStripMenuItem1.Image = ((System.Drawing.Image)(resources.GetObject("usersToolStripMenuItem1.Image")));
             this.usersToolStripMenuItem1.Name = "usersToolStripMenuItem1";
-            this.usersToolStripMenuItem1.Size = new System.Drawing.Size(209, 56);
+            this.usersToolStripMenuItem1.Size = new System.Drawing.Size(175, 22);
             this.usersToolStripMenuItem1.Text = "Users";
             this.usersToolStripMenuItem1.Click += new System.EventHandler(this.usersToolStripMenuItem1_Click);
             // 
@@ -403,7 +416,7 @@
             this.tenantProfileToolStripMenuItem});
             this.customerProfileToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("customerProfileToolStripMenuItem.Image")));
             this.customerProfileToolStripMenuItem.Name = "customerProfileToolStripMenuItem";
-            this.customerProfileToolStripMenuItem.Size = new System.Drawing.Size(209, 56);
+            this.customerProfileToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.customerProfileToolStripMenuItem.Text = "&Owner Profile";
             this.customerProfileToolStripMenuItem.Click += new System.EventHandler(this.customerProfileToolStripMenuItem_Click);
             // 
@@ -419,7 +432,7 @@
             // 
             this.chartOfAccountToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("chartOfAccountToolStripMenuItem.Image")));
             this.chartOfAccountToolStripMenuItem.Name = "chartOfAccountToolStripMenuItem";
-            this.chartOfAccountToolStripMenuItem.Size = new System.Drawing.Size(209, 56);
+            this.chartOfAccountToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.chartOfAccountToolStripMenuItem.Text = "Chart of Account";
             this.chartOfAccountToolStripMenuItem.Click += new System.EventHandler(this.chartOfAccountToolStripMenuItem_Click);
             // 
@@ -427,7 +440,7 @@
             // 
             this.roomsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("roomsToolStripMenuItem.Image")));
             this.roomsToolStripMenuItem.Name = "roomsToolStripMenuItem";
-            this.roomsToolStripMenuItem.Size = new System.Drawing.Size(209, 56);
+            this.roomsToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.roomsToolStripMenuItem.Text = "Rooms";
             this.roomsToolStripMenuItem.Click += new System.EventHandler(this.roomsToolStripMenuItem_Click);
             // 
@@ -435,9 +448,17 @@
             // 
             this.roomAssignmentToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("roomAssignmentToolStripMenuItem.Image")));
             this.roomAssignmentToolStripMenuItem.Name = "roomAssignmentToolStripMenuItem";
-            this.roomAssignmentToolStripMenuItem.Size = new System.Drawing.Size(209, 56);
+            this.roomAssignmentToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.roomAssignmentToolStripMenuItem.Text = "Room Assignment";
             this.roomAssignmentToolStripMenuItem.Click += new System.EventHandler(this.roomAssignmentToolStripMenuItem_Click);
+            // 
+            // dateConfigurationToolStripMenuItem
+            // 
+            this.dateConfigurationToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("dateConfigurationToolStripMenuItem.Image")));
+            this.dateConfigurationToolStripMenuItem.Name = "dateConfigurationToolStripMenuItem";
+            this.dateConfigurationToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.dateConfigurationToolStripMenuItem.Text = "Date Configuration";
+            this.dateConfigurationToolStripMenuItem.Click += new System.EventHandler(this.dateConfigurationToolStripMenuItem_Click);
             // 
             // toolStripButton3
             // 
@@ -456,24 +477,17 @@
             this.tmrToday.Enabled = true;
             this.tmrToday.Tick += new System.EventHandler(this.tmrToday_Tick);
             // 
-            // dateConfigurationToolStripMenuItem
+            // Reports
             // 
-            this.dateConfigurationToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("dateConfigurationToolStripMenuItem.Image")));
-            this.dateConfigurationToolStripMenuItem.Name = "dateConfigurationToolStripMenuItem";
-            this.dateConfigurationToolStripMenuItem.Size = new System.Drawing.Size(209, 56);
-            this.dateConfigurationToolStripMenuItem.Text = "Date Configuration";
-            this.dateConfigurationToolStripMenuItem.Click += new System.EventHandler(this.dateConfigurationToolStripMenuItem_Click);
-            // 
-            // tssPayment
-            // 
-            this.tssPayment.Image = ((System.Drawing.Image)(resources.GetObject("tssPayment.Image")));
-            this.tssPayment.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tssPayment.Name = "tssPayment";
-            this.tssPayment.Size = new System.Drawing.Size(58, 69);
-            this.tssPayment.Text = "Payment";
-            this.tssPayment.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.tssPayment.Visible = false;
-            this.tssPayment.Click += new System.EventHandler(this.tssPayment_Click);
+            this.Reports.Image = ((System.Drawing.Image)(resources.GetObject("Reports.Image")));
+            this.Reports.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.Reports.Name = "Reports";
+            this.Reports.Size = new System.Drawing.Size(54, 69);
+            this.Reports.Text = "Reports";
+            this.Reports.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.Reports.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.Reports.Visible = false;
+            this.Reports.Click += new System.EventHandler(this.Reports_Click);
             // 
             // Form1
             // 
@@ -550,6 +564,7 @@
         private System.Windows.Forms.ToolStripMenuItem tenantProfileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem dateConfigurationToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton tssPayment;
+        private System.Windows.Forms.ToolStripButton Reports;
     }
 }
 

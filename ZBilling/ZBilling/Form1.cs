@@ -542,5 +542,17 @@ namespace ZBilling
                 py.Show();
             }
         }
+
+        private void Reports_Click(object sender, EventArgs e)
+        {
+            if (CheckAndLoadSettings())
+            {
+                ReportChooser rc = new ReportChooser();
+                rc.MdiParent = this;
+                rc.DBPath = DatabasePath;
+                rc.LoginUser = tssUserlogin.Text;
+                rc.Show();
+            }
+        }
     }
 }

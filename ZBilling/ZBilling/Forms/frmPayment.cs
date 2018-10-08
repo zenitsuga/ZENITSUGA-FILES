@@ -165,7 +165,7 @@ namespace ZBilling.Forms
         {
             try
             {
-                string Query = "select t.sysid,t.DateTransaction,t.transactionNo,td.Description, " +
+                string Query = "select td.referenceID,t.DateTransaction,t.transactionNo,td.Description, " +
                                " td.Amount,t.RoomID,td.Remarks,case when td.isPaid = 0 then 'NO' else 'YES' end as 'Is Paid',td.PaymentRef as 'Reference' " +
                                " from tbltransactiondetails td " +
                                " left join tbltransaction t on td.ReferenceID = t.sysid " +
@@ -284,22 +284,24 @@ namespace ZBilling.Forms
                     f.Amount = tssTotalAmount.Text;
                     f.AmountTendered = AmountTendered;
                     f.ShowDialog();
-                    string Remarks = "Pay:" + f.AmountTendered + " Change:" + (double.Parse(f.AmountTendered) - double.Parse(f.Amount)).ToString();
+                    string Remarks = "Pay:" + f.AmountTendered + " Change:" + (double.Parse(f.AmountTendered) - double.Parse(f.Amount)).ToString().Replace(",", "");
                     string UserID = cf.GetSysID("tblUsers"," where username='" + LoginUser + "'").ToString();
                     if (f.IsPaid)
                     {
                         string Query = "Insert into tblPayment(TransactionNo,PaymentMethod,Amount,Remarks,UserCreate)values("
-                            + "'" + PaymentCode + "'," + f.PaymentMethod + "," + f.Amount + ",'" + Remarks + "'," + UserID + ")";
+                            + "'" + PaymentCode + "'," + f.PaymentMethod + "," + f.Amount.Replace(",","") + ",'" + Remarks + "'," + UserID + ")";
                         if (cf.ExecuteNonQuery(Query))
                         {
                             if (dataGridView2.Rows.Count > 0)
                             {
                                 foreach (DataGridViewRow dgrv in dataGridView2.Rows)
                                 {
-                                    string SysID = dgrv.Cells["sysid"].Value.ToString();
-                                    string BillUpdate = "update tblTransactionDetails set isPaid = 1,PaymentRef='" + PaymentCode + "' where sysid =" + SysID;
+                                    string SysID = dgrv.Cells["ReferenceID"].Value.ToString();
+                                    string BillUpdate = "update tblTransactionDetails set isPaid = 1,PaymentRef='" + PaymentCode + "' where ReferenceID =" + SysID;
                                     cf.ExecuteNonQuery(BillUpdate);
                                 }
+                                MessageBox.Show("Payment Successfull");
+                                dataGridView2.DataSource = null;
                             }
                         }
                     }

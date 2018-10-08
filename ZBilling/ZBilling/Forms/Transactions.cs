@@ -435,7 +435,19 @@ namespace ZBilling.Forms
         private void button1_Click_1(object sender, EventArgs e)
         {
             frmBillingAccount ba = new frmBillingAccount();
+            ba.DBPath = DBPath;
             ba.ShowDialog();
+            if (ba.isChoose)
+            {
+                DataRow drowID = dtTransDetails.NewRow();
+                drowID["ReferenceID"] = textBox1.Text;
+                drowID["Accounts"] = ba.AccountCode;
+                drowID["Description"] = ba.Description;
+                double IntAmount = double.Parse(ba.FixedAmount);
+                drowID["Amount"] = string.Format("{0:C}", IntAmount).Replace("$", "");
+                drowID["Remarks"] = "Manual Add";
+                dataGridView1.Rows.Add(drowID);
+            }
         }
 
         private string FixedNegaAmount(string Amount)
