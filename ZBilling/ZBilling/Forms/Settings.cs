@@ -99,20 +99,26 @@ namespace ZBilling.Forms
         }
         private void Settings_Load(object sender, EventArgs e)
         {
-            this.Text = this.Text.Replace("[CompanyName]", CompanyName);
-            IniFileSettings = Environment.CurrentDirectory + "\\Settings.ini";
-            if(!File.Exists(IniFileSettings))
+            try
             {
-                MessageBox.Show("Error: Please check your Settings.ini for database settings", "File Not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                this.Text = this.Text.Replace("[CompanyName]", CompanyName);
+                IniFileSettings = Environment.CurrentDirectory + "\\Settings.ini";
+                if (!File.Exists(IniFileSettings))
+                {
+                    MessageBox.Show("Error: Please check your Settings.ini for database settings", "File Not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                ReadSettings();
+                validateDatabase();
+
+                ValidatedLicense();
+                if (isValidLicense && isDatabaseConnected)
+                {
+                    this.Close();
+                }
             }
-            ReadSettings();
-            validateDatabase();
-            
-            ValidatedLicense();
-            if (isValidLicense && isDatabaseConnected)
+            catch
             {
-                this.Close();
             }
         }
 

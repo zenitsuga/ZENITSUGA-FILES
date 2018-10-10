@@ -17,6 +17,8 @@ namespace ZBilling.Forms
         public string DBPath;
         public string LoginUser;
 
+        DataView dvRecords;
+
         public frmRooms()
         {
             InitializeComponent();
@@ -47,7 +49,8 @@ namespace ZBilling.Forms
                 cf.DbLocation = DBPath;
                 string Query = "Select r.sysId as 'ID',r.RoomType,r.RoomName,u.Username,r.Description,r.SizeSQM as 'Size(SQM)',r.PricePerSQM,r.MonthlyDue from tblRooms r left join tblUsers u on r.UserID = u.sysID where r.isActive = 1";
                 dataGridView1.DataSource = null;
-                dataGridView1.DataSource = cf.GetRecords(Query);
+                dvRecords = new DataView(cf.GetRecords(Query));
+                dataGridView1.DataSource = dvRecords.ToTable();
                 dataGridView1.Refresh();
             }
             catch
@@ -117,6 +120,12 @@ namespace ZBilling.Forms
                    foreach (DataGridViewRow dgr in dataGridView1.SelectedRows)
                    {
                        string sysid = dgr.Cells[0].Value.ToString();
+                       string RoomNumber = dgr.Cells["RoomName"].Value.ToString();
+                       if (cf.GetRecords("Select * from tblRoomAssignment where RoomNumber = '" + RoomNumber + "'").Rows.Count > 0)
+                       {
+                           MessageBox.Show("Error: Cannot delete Room. Please check room assignment first.", "Unable to delete Room :" + RoomNumber, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                           return;
+                       }
                        string Query = "Delete from tblRooms where sysid=" + sysid;
                        if (cf.ExecuteNonQuery(Query))
                        {
@@ -204,6 +213,28 @@ namespace ZBilling.Forms
                     return;
                 }
             }
+        }
+
+        private void textBox6_TextChanged(object sender, EventArgs e)
+        {
+            //r.RoomType,r.RoomName,u.Username,r.Description,r.SizeSQM as 'Size(SQM)'
+            dvRecords.RowFilter = "RoomType Like '" + textBox6.Text + "%'";
+            if (dvRecords.ToTable().Rows.Count == 0)
+            {
+                dvRecords.RowFilter = "Username Like '" + textBox6.Text + "%'";
+                if (dvRecords.ToTable().Rows.Count == 0)
+                {
+                    dvRecords.RowFilter = "Description Like '" + textBox6.Text + "%'";
+                    if (dvRecords.ToTable().Rows.Count == 0)
+                    {
+                        
+                            dvRecords.RowFilter = null;
+                        
+                    }
+                }
+            }
+            dataGridView1.DataSource = dvRecords.ToTable();
+            dataGridView1.Refresh();
         }
         
     }

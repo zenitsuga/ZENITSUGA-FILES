@@ -79,7 +79,8 @@ namespace ZBilling.Forms
             DataTable dtRecords = cf.GetRecords(Query);
             if (dtRecords.Rows.Count > 0)
             {
-                dataGridView1.DataSource = dtRecords;
+                dv = new DataView(dtRecords);
+                dataGridView1.DataSource = dv.ToTable();
                 dataGridView1.Refresh();
             }
         }
@@ -104,8 +105,24 @@ namespace ZBilling.Forms
             int index = dataGridView1.SelectedRows[0].Index;
             textBox1.Text = dataGridView1["Accounts", index].Value.ToString();
             textBox4.Text = dataGridView1["AccountCode", index].Value.ToString();
-            textBox3.Text = dataGridView1["Description", index].Value.ToString();
+            textBox2.Text = dataGridView1["Description", index].Value.ToString();
             textBox3.Text = dataGridView1["FixedAmount", index].Value.ToString();
+        }
+
+        private void textBox5_TextChanged(object sender, EventArgs e)
+        {
+            //AccountCode,Accounts,Description
+            dv.RowFilter = "AccountCode like '" + textBox5.Text +"%'";
+            if (dv.ToTable().Rows.Count == 0)
+            {
+                dv.RowFilter = "Accounts like '" + textBox5.Text + "%'";
+            }
+            if (dv.ToTable().Rows.Count == 0)
+            {
+                dv.RowFilter = "Description like '" + textBox5.Text + "%'";
+            }
+            dataGridView1.DataSource = dv.ToTable();
+            dataGridView1.Refresh();
         }
 
         

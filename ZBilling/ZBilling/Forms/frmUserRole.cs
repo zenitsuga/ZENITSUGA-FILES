@@ -67,9 +67,26 @@ namespace ZBilling.Forms
                 FV.Add(textBox1.Text);
                 List<string> FI = new List<string>();
                 FI.Add(checkBox1.Checked ? "1" : "0");
-                if (!cf.InsertRecords("tblUserRole", FC, FV,FI))
+
+                if (lblSysID.Text == "0")
                 {
-                    MessageBox.Show("Error: Saving records error. Please check your entry", "Saving Record Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (!cf.InsertRecords("tblUserRole", FC, FV, FI))
+                    {
+                        MessageBox.Show("Error: Saving records error. Please check your entry", "Saving Record Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else
+                {
+                    List<string> SV = new List<string>();
+                    string Criteria = string.Empty;
+
+                    SV.Add("Role = '" + textBox1.Text + "'");
+                    SV.Add("isActive = " + (checkBox1.Checked == true ? "1":"0"));
+                    Criteria = "where sysid=" + lblSysID.Text;
+                    if (!cf.UpdateRecords("tblUserRole",SV,Criteria))
+                    {
+                        MessageBox.Show("Error: Saving records error. Please check your entry", "Saving Record Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
                 MessageBox.Show("Done", "Save Record : UserRole", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 textBox1.Text = string.Empty;
@@ -109,12 +126,20 @@ namespace ZBilling.Forms
 
             InsertRecords();
             LoadRecords();
+            lblSysID.Text = "0";
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             DeleteRecords();
             LoadRecords();
+            lblSysID.Text = "0";
+        }
+
+        private void dataGridView1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            lblSysID.Text = dataGridView1["sysid", dataGridView1.CurrentRow.Index].Value.ToString();
+            textBox1.Text = dataGridView1["Role", dataGridView1.CurrentRow.Index].Value.ToString();
         }
     }
 }

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button7 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.textBox13 = new System.Windows.Forms.TextBox();
             this.label21 = new System.Windows.Forms.Label();
@@ -86,7 +87,6 @@
             this.label17 = new System.Windows.Forms.Label();
             this.comboBox4 = new System.Windows.Forms.ComboBox();
             this.label16 = new System.Windows.Forms.Label();
-            this.button7 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -142,10 +142,21 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Customer";
             // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(752, 84);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(75, 23);
+            this.button7.TabIndex = 29;
+            this.button7.Text = "New Record";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Visible = false;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
             // button6
             // 
             this.button6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button6.Enabled = false;
+            this.button6.Enabled = true;
             this.button6.Location = new System.Drawing.Point(775, 390);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(103, 23);
@@ -153,6 +164,7 @@
             this.button6.TabStop = false;
             this.button6.Text = "Print Statement";
             this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // textBox13
             // 
@@ -772,16 +784,6 @@
             this.label16.Size = new System.Drawing.Size(32, 13);
             this.label16.TabIndex = 3;
             this.label16.Text = "Year:";
-            // 
-            // button7
-            // 
-            this.button7.Location = new System.Drawing.Point(752, 84);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(75, 23);
-            this.button7.TabIndex = 29;
-            this.button7.Text = "New Record";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // Transactions
             // 

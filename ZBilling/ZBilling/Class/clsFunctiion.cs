@@ -5,6 +5,7 @@ using System.Text;
 using clsLic;
 using System.Data;
 using System.Data.SqlClient;
+using OfficeOpenXml;
 
 namespace ZBilling.Class
 {
@@ -365,6 +366,60 @@ namespace ZBilling.Class
             }
             return result;  
         }
+
+        public static ExcelPackage CreateExcelDocument(int[] arr)
+        {
+            String path = @"D:\temp\testsheet3.xlsx";
+            //FileInfo newFile = null;
+            /*if (!File.Exists(path + "\\testsheet2.xlsx"))
+                newFile = new FileInfo(path + "\\testsheet2.xlsx");
+            else
+                return newFile;*/
+            using (ExcelPackage package = new ExcelPackage())
+            {
+                ExcelWorksheet ws = package.Workbook.Worksheets.Add("testsheet");
+
+                ws.Cells["B1"].Value = "Number of Used Agencies";
+                ws.Cells["C1"].Value = "Active Agencies";
+                ws.Cells["D1"].Value = "Inactive Agencies";
+                ws.Cells["E1"].Value = "Total Hours Volunteered";
+                ws.Cells["B1:E1"].Style.Font.Bold = true;
+
+                int x = 2;
+                char pos = 'B';
+                foreach (object o in arr)
+                {
+                    String str = pos + x.ToString();
+                    ws.Cells[str].Value = o.ToString();
+                    if (pos > 'E')
+                    {
+                        pos = 'B';
+                        x++;
+                    }
+
+                    pos++;
+                }
+                //newFile.Create();
+                //newFile.MoveTo(@"C:/testSheet.xlsx");
+                //package.SaveAs(newFile);
+                package.Save();
+                /*Stream stream = File.Create(path);
+                package.SaveAs(stream);
+                stream.Close();*/
+
+                //byte[] data = File.ReadAllBytes(path);
+                //byte[] bin = package.GetAsByteArray();
+                //String path = Path.GetTempPath();
+                //File.WriteAllBytes(path, bin);
+                //File.WriteAllBytes(path + "testsheet.xlsx", bin);
+                //HttpContext.Current.Response.Write("<script>alert('"+ temp + "');</script>");
+                //System.Diagnostics.Process.Start(path + "\\testsheet.xlsx");
+
+                return package;
+            }
+
+        }
+
 
         public bool InsertRecords(string TableName,List<string> FieldColumn, List<string> FieldValue,List<string> FieldInteger)
         {

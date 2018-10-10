@@ -23,15 +23,18 @@ C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\ZBilling\obj\x86\Deb
 C:\Users\bok\Documents\Visual Studio 2010\Projects\ZBilling\ZBilling\obj\x86\Debug\ZBilling.pdb
 E:\ZENITSUGA FILES\ZBilling\ZBilling\bin\Debug\Settings.ini
 E:\ZENITSUGA FILES\ZBilling\ZBilling\bin\Debug\Reports\Settings.ini
+E:\ZENITSUGA FILES\ZBilling\ZBilling\bin\Debug\Reports\BillingStatement.xlsx
 E:\ZENITSUGA FILES\ZBilling\ZBilling\bin\Debug\ResourceFolder\DefaultSettings.txt
 E:\ZENITSUGA FILES\ZBilling\ZBilling\bin\Debug\ZBilling.exe.config
 E:\ZENITSUGA FILES\ZBilling\ZBilling\bin\Debug\ZBilling.exe
 E:\ZENITSUGA FILES\ZBilling\ZBilling\bin\Debug\ZBilling.pdb
 E:\ZENITSUGA FILES\ZBilling\ZBilling\bin\Debug\clsLic.dll
+E:\ZENITSUGA FILES\ZBilling\ZBilling\bin\Debug\EPPlus.dll
 E:\ZENITSUGA FILES\ZBilling\ZBilling\bin\Debug\clsLic.pdb
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.csprojResolveAssemblyReference.cache
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.Form1.resources
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.Forms.BillingStatement.resources
+E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.Forms.BillingStatementRep.resources
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.Forms.Form1.resources
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.Forms.frmBillingAccount.resources
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.Forms.frmChartOfAccount.resources
@@ -54,5 +57,7 @@ E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.Forms.Transactions.r
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.Properties.Resources.resources
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.ReportChooser.resources
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.csproj.GenerateResource.Cache
+E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\RdlCompile.cache
+E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\RdlCompile.compiled
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.exe
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.pdb

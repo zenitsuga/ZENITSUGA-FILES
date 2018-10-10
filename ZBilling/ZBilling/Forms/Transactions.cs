@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using ZBilling.Class;
+using System.IO;
+using OfficeOpenXml;
+using System.Diagnostics;
 
 namespace ZBilling.Forms
 {
@@ -14,8 +17,15 @@ namespace ZBilling.Forms
     {
         public string DBPath;
         clsFunctiion cf = new clsFunctiion();
+        IniFile iniF;
 
+        public string IniFileSettings;
         public string Userlogin;
+        public bool isBillingExcel;
+
+        public string CompanyName;
+        public string CompanyAddress;
+        public string ContactNumber;
 
         string customerType = string.Empty;
 
@@ -162,6 +172,10 @@ namespace ZBilling.Forms
 
         private void Transactions_Load(object sender, EventArgs e)
         {
+            iniF = new IniFile(IniFileSettings);
+            CompanyName = iniF.Read("CompanyName", "CompanyProfile");
+            CompanyAddress = iniF.Read("CompanyName", "CompanyAddress");
+            ContactNumber = iniF.Read("CompanyName", "ContactNumber");
             isValidDueDate = false;
             loadNewTrans(ref isValidDueDate);
             DataTable dtResult = dtTransactionRecords();
@@ -170,7 +184,7 @@ namespace ZBilling.Forms
                 dtDistinctRecord(dtResult, "DueDate",comboBox4,typeof(DateTime));
                 dvTrans = dtResult.DefaultView;        
             }
-
+            isBillingExcel = iniF.Read("BillingStatementToExcel", "Reports") == "true" ? true:false;
         }
 
         private void dtDistinctRecord(DataTable dtRecords, string FilterField, ComboBox cb,Type type)
@@ -446,8 +460,9 @@ namespace ZBilling.Forms
                 double IntAmount = double.Parse(ba.FixedAmount);
                 drowID["Amount"] = string.Format("{0:C}", IntAmount).Replace("$", "");
                 drowID["Remarks"] = "Manual Add";
-                dataGridView1.Rows.Add(drowID);
+                dtTransDetails.Rows.Add(drowID);
             }
+            dataGridView1.DataSource = dtTransDetails;
         }
 
         private string FixedNegaAmount(string Amount)
@@ -679,6 +694,10 @@ namespace ZBilling.Forms
                     dataGridView1.DataSource = dtTransDetails;
                     ComputeOutStanding();
                     ComputeSummary();
+                    if (dataGridView1.Rows.Count > 0)
+                    {
+                        button6.Enabled = true;
+                    }
                 }
             }
             catch
@@ -1150,6 +1169,58 @@ namespace ZBilling.Forms
             }
             catch
             {
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+         DialogResult dr = MessageBox.Show("Are you sure you want to print this Billing Statement?", "Print Billing Statement: " + textBox1.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+         if (dr == DialogResult.Yes)
+         {
+             bool IsExcelBilling = isBillingExcel;
+             if (isBillingExcel)
+             {
+                 string ReportPath = Environment.CurrentDirectory + "\\Reports\\BillingStatement.xlsx";
+                 if (!File.Exists(ReportPath))
+                 {
+                     MessageBox.Show("Error: Cannot generate Billing Statement. Template for Billing Statement not found.", "Check Report Template", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                     return;
+                 }
+
+                 ProcessExcelBillingStatement(ReportPath);
+             }
+             else
+             {
+                 BillingStatementRep bsr = new BillingStatementRep();
+                 bsr.DBPath = DBPath;
+                 bsr.dtRecords = dtTransDetails;
+                 bsr.ShowDialog();
+             }
+         }
+        }
+        private void ProcessExcelBillingStatement(string ExcelTemplatePath)
+        {
+            var file = new FileInfo(ExcelTemplatePath);
+
+            if (file.Exists)
+            {
+                using (ExcelPackage excelPackage = new ExcelPackage(file))
+                {
+                    ExcelWorksheet ws = excelPackage.Workbook.Worksheets.First();
+                    ws.Cells[1, 2].Value = CompanyName;
+                    ws.Cells[2, 2].Value = CompanyAddress;
+                    ws.Cells[4, 2].Value = string.Empty;
+                    ws.Cells[3, 2].Value = ContactNumber;
+                    ws.Cells[5, 2].Value = "Billing Statement";
+                    if (!string.IsNullOrEmpty(iniF.Read("Password", "Reports")))
+                    {
+                        excelPackage.Encryption.Password = iniF.Read("Password", "Reports");
+                    }
+                    ws.Protection.IsProtected = true;
+                    excelPackage.Save();
+                    ProcessStartInfo si = new ProcessStartInfo(ExcelTemplatePath);
+                    Process.Start(si);
+                }
             }
         }
     }

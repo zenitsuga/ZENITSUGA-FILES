@@ -14,7 +14,10 @@ namespace ZBilling
     public partial class Form1 : Form
     {
         clsFunctiion cf = new clsFunctiion();
+
+        public string InifileSettings;
         public bool isDatabaseConnected;
+        bool isBillingExcel = false;
         bool isValidLicense = false;
         bool isSuccessLogin;
         int roleUser = 0;
@@ -39,6 +42,9 @@ namespace ZBilling
             try
             {
                 CompanyName = iniF.Read("CompanyName", "CompanyProfile");
+                this.BackgroundImageLayout = ImageLayout.Stretch;
+                this.BackgroundImage
+                    = Image.FromFile(iniF.Read("MainBackground", "Application"));
                 if (!string.IsNullOrEmpty(CompanyName))
                     this.Text = this.Text.Replace("[CompanyName]", CompanyName);
             }
@@ -53,7 +59,6 @@ namespace ZBilling
             iniF = new IniFile(IniPath);
             try
             {
-                iniF = new IniFile(IniFileSettings);
                 CheckCompanyName();
                 //DatabasePath = cf.IsConnected(IniFileSettings); //iniF.Read("DatabaseLocation", "Database");
                 string ErrMsg = string.Empty;
@@ -64,9 +69,8 @@ namespace ZBilling
                     return;
                 }
                 string LicenseCode = iniF.Read("LicenseCode","License");
-                
+                isBillingExcel = (string.IsNullOrEmpty(iniF.Read("BillingStatementToExcel", "Reports")) == true) ? true:false;
                 isValidLicense = cf.ValidateLicense(LicenseCode, ref daysremain);
-
                 if (!isValidLicense)
                 {
                     DialogResult dr = MessageBox.Show("Error: Invalid License please provide. Would you like to open your settings?", "Invalid License", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
@@ -302,6 +306,10 @@ namespace ZBilling
                     //}
                     ReadIniFile(IniPath);
                 }
+                if (string.IsNullOrEmpty(InifileSettings))
+                {
+                    InifileSettings = IniPath;
+                }
             }
             catch (Exception ex)
             {
@@ -425,6 +433,8 @@ namespace ZBilling
                 trans.MdiParent = this;
                 trans.DBPath = DatabasePath;
                 trans.Userlogin = tssUserlogin.Text;
+                trans.IniFileSettings = InifileSettings;
+                trans.isBillingExcel = isBillingExcel;
                 trans.WindowState = FormWindowState.Maximized;
                 trans.Show();
                 if (!trans.isValidDueDate)
@@ -441,6 +451,7 @@ namespace ZBilling
             {
                 Transactions trans = new Transactions();
                 trans.MdiParent = this;
+                trans.isBillingExcel = isBillingExcel;
                 trans.DBPath = DatabasePath;
                 trans.Show();
             }

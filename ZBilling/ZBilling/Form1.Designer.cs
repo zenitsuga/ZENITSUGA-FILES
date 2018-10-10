@@ -63,6 +63,7 @@
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.tssTransaction = new System.Windows.Forms.ToolStripButton();
             this.tssPayment = new System.Windows.Forms.ToolStripButton();
+            this.Reports = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.tssManageDB = new System.Windows.Forms.ToolStripSplitButton();
@@ -76,7 +77,6 @@
             this.dateConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.tmrToday = new System.Windows.Forms.Timer(this.components);
-            this.Reports = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -356,6 +356,18 @@
             this.tssPayment.Visible = false;
             this.tssPayment.Click += new System.EventHandler(this.tssPayment_Click);
             // 
+            // Reports
+            // 
+            this.Reports.Image = ((System.Drawing.Image)(resources.GetObject("Reports.Image")));
+            this.Reports.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.Reports.Name = "Reports";
+            this.Reports.Size = new System.Drawing.Size(54, 69);
+            this.Reports.Text = "Reports";
+            this.Reports.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.Reports.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.Reports.Visible = false;
+            this.Reports.Click += new System.EventHandler(this.Reports_Click);
+            // 
             // toolStripButton2
             // 
             this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
@@ -456,8 +468,8 @@
             // 
             this.dateConfigurationToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("dateConfigurationToolStripMenuItem.Image")));
             this.dateConfigurationToolStripMenuItem.Name = "dateConfigurationToolStripMenuItem";
-            this.dateConfigurationToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
-            this.dateConfigurationToolStripMenuItem.Text = "Date Configuration";
+            this.dateConfigurationToolStripMenuItem.Size = new System.Drawing.Size(215, 56);
+            this.dateConfigurationToolStripMenuItem.Text = "Other Configuration";
             this.dateConfigurationToolStripMenuItem.Click += new System.EventHandler(this.dateConfigurationToolStripMenuItem_Click);
             // 
             // toolStripButton3
@@ -477,18 +489,6 @@
             this.tmrToday.Enabled = true;
             this.tmrToday.Tick += new System.EventHandler(this.tmrToday_Tick);
             // 
-            // Reports
-            // 
-            this.Reports.Image = ((System.Drawing.Image)(resources.GetObject("Reports.Image")));
-            this.Reports.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.Reports.Name = "Reports";
-            this.Reports.Size = new System.Drawing.Size(54, 69);
-            this.Reports.Text = "Reports";
-            this.Reports.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.Reports.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.Reports.Visible = false;
-            this.Reports.Click += new System.EventHandler(this.Reports_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -501,7 +501,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "s";
+            this.Text = "[CompanyName]";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);

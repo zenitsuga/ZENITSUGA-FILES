@@ -15,5 +15,10 @@ namespace ZBilling.Forms
         {
             InitializeComponent();
         }
+
+        private void BillingStatement_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
