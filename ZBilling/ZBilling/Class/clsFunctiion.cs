@@ -6,6 +6,8 @@ using clsLic;
 using System.Data;
 using System.Data.SqlClient;
 using OfficeOpenXml;
+using System.Net.Mail;
+using System.Net;
 
 namespace ZBilling.Class
 {
@@ -75,6 +77,63 @@ namespace ZBilling.Class
                 ErrMsg = ex.Message.ToString();
             }
             return result;
+        }
+        public bool SendEmail(string Username,string ClientEmail,string HostEmail,string password,string Host,string Body)
+        {
+            bool result = false;
+            try
+            {
+                string keys = "zbln-3asd-sqoy19";
+
+
+                string PasswordRetrieve = string.Empty;
+
+                if (!string.IsNullOrEmpty(Username))
+                {
+                    PasswordRetrieve = GetRecords("select Password from tblUsers where username = '" + Username + "'").Rows[0][0].ToString();
+                    PasswordRetrieve = clsLic.CryptoEngine.Decrypt(PasswordRetrieve, keys).ToString();
+                }
+
+                SmtpClient client = new SmtpClient();
+                client.Host = Host;
+                client.Port = 587;
+                client.UseDefaultCredentials = true;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.EnableSsl = true;
+                client.Credentials = new NetworkCredential(HostEmail, password);
+                client.Send(HostEmail,ClientEmail,"Password Retrieval",Body); 
+
+                result = true;
+            }
+            catch(Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show("Error:" + ex.Message.ToString(), "Error Sending. Please check", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+            }
+            return result;
+        }
+        public string GetDefaultUserPassword(IniFile inif)
+        {
+            string result = string.Empty;
+            try
+            {
+                result = inif.Read("DefaultPassword", "Application"); 
+            }
+            catch
+            {
+            }
+            return result;
+        }
+        public bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address.ToString() == email;
+            }
+            catch
+            {
+                return false;
+            }
         }
         public bool ValidateUser(string Username, string Password, ref string UserRole)
         {

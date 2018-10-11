@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using ZBilling.Class;
+using Microsoft.VisualBasic;
 
 namespace ZBilling.Forms
 {
@@ -16,10 +17,25 @@ namespace ZBilling.Forms
 
         public string DBPath;
         public string LoginUser;
+        public IniFile IniPath;
 
         public frmDateConfiguration()
         {
             InitializeComponent();
+        }
+
+        private void LoadEmailInfo()
+        {
+            try
+            {
+                textBox8.Text = IniPath.Read("email_host", "Email");
+                textBox9.Text = IniPath.Read("username", "Email");
+                textBox10.Text = IniPath.Read("password", "Email");
+                textBox11.Text = IniPath.Read("bodymessage", "Email");
+            }
+            catch
+            {
+            }
         }
 
         private void LoadDateSettings()
@@ -71,8 +87,9 @@ namespace ZBilling.Forms
         }
 
         private void frmDateConfiguration_Load(object sender, EventArgs e)
-        {
+        {   
             LoadRecords();
+            LoadEmailInfo();
         }
 
         private void LoadInterestRateHistory()
@@ -178,6 +195,85 @@ namespace ZBilling.Forms
                 {
                     MessageBox.Show("Done", "Update sucessfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+            }
+        }
+
+        private void textBox10_MouseHover(object sender, EventArgs e)
+        {
+            textBox10.PasswordChar = '\0';
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            bool isvalid = false;
+            bool ContinueSending = false;
+            string Email = string.Empty;
+            while (!isvalid)
+            {
+                Email = Microsoft.VisualBasic.Interaction.InputBox("Enter email to send message", "Test Email", "", -1, -1);
+                if (!cf.IsValidEmail(Email))
+                {
+                    isvalid = false;
+                }
+                else
+                {
+                    isvalid = true;
+                }
+            }
+            if (string.IsNullOrEmpty(textBox8.Text) || string.IsNullOrEmpty(textBox9.Text) || string.IsNullOrEmpty(textBox10.Text))
+            {
+                MessageBox.Show("Error: Please check your host email.", "Invalid Host Email Settings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (string.IsNullOrEmpty(textBox11.Text))
+            {
+                DialogResult dr = MessageBox.Show("Are you sure you want to send without body/mesage?", "No Body/Message to send", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dr == DialogResult.Yes)
+                {
+                    ContinueSending = true;
+                }
+            }
+            else
+            {
+                ContinueSending = true;
+            }
+            if (ContinueSending)
+            {
+                if (cf.SendEmail(string.Empty, Email, textBox9.Text, textBox10.Text, textBox8.Text, textBox11.Text))
+                {
+                    MessageBox.Show("Successfully sent to " + Email, "Password Sent", MessageBoxButtons.OK, MessageBoxIcon.Information); 
+                }
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(textBox8.Text) || string.IsNullOrEmpty(textBox9.Text) || string.IsNullOrEmpty(textBox10.Text))
+            {
+                MessageBox.Show("Error: Please check your host email.", "Invalid Host Email Settings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            bool ContinueSending = false;
+            if (string.IsNullOrEmpty(textBox11.Text))
+            {
+                DialogResult dr = MessageBox.Show("Are you sure you want to send without body/mesage?", "No Body/Message to send", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dr == DialogResult.Yes)
+                {
+                    ContinueSending = true;
+                }
+            }
+            else
+            {
+                ContinueSending = true;
+            }
+            if (ContinueSending)
+            {
+                IniPath.Write("email_host",textBox8.Text, "Email");
+                IniPath.Write("username",textBox9.Text, "Email");
+                IniPath.Write("password", textBox10.Text, "Email");
+                IniPath.Write("bodymessage",textBox11.Text, "Email");
+
+                MessageBox.Show("Email Setting saved.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }

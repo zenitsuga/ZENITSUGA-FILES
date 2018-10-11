@@ -7,11 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using ZBilling.Class;
+
 namespace ZBilling.Forms
 {
     public partial class frmUsers : Form
     {
         clsFunctiion cf = new clsFunctiion();
+
+        public IniFile inif;
+        string keys = "zbln-3asd-sqoy19";
+
+        public string UserRole;
         public string DBPath;
 
         DataView dvRecords;
@@ -40,6 +46,7 @@ namespace ZBilling.Forms
         {
             LoadSettings();
             LoadRecords();
+            textBox5.Text = cf.GetDefaultUserPassword(inif);
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
@@ -54,9 +61,9 @@ namespace ZBilling.Forms
                 MessageBox.Show("Error: Invalid User. Please check your entry", "Invalid Entry", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if (cf.isRecordExists("tblUsers", " where Username=", "'" + textBox1.Text + "'"))
+            if (cf.isRecordExists("tblUsers", " where Username=", "'" + textBox2.Text + "'"))
             {
-                UpdateRecords();
+                UpdateRecords(false);
             }
             else
             {
@@ -100,18 +107,26 @@ namespace ZBilling.Forms
             }
             label8.Text = "0";
         }
-        private void UpdateRecords()
+        private void UpdateRecords(bool isDefaultPassword)
         {
             try
             {
                 cf.DbLocation = DBPath;
                 List<string> SV = new List<string>();
                 string Criteria = string.Empty;
-
-                SV.Add("Username = '" + textBox1.Text + "'");
-                SV.Add("Password = '" + textBox2.Text + "'");
+                
+                SV.Add("Username = '" + textBox2.Text + "'");
+                if (isDefaultPassword)
+                {
+                    SV.Add("Password = '" + clsLic.CryptoEngine.Encrypt(textBox5.Text, keys) + "'");
+                }
+                else
+                {
+                    SV.Add("Password = '" + clsLic.CryptoEngine.Encrypt(textBox1.Text, keys) + "'");
+                }
                 SV.Add("Fullname = '" + textBox4.Text + "'");
-                SV.Add("Role = " + (checkBox1.Checked ? "1" : "0"));
+                //SV.Add("EmailAddress = '" + textBox5.Text + "'");
+                SV.Add("Role = " + (comboBox1.Text.ToLower().Contains("admin") ? "1" : "0"));
                 SV.Add("AllowAccessUser = " + (checkBox2.Checked ? "1" : "0"));
 
                 Criteria = "where sysID=" + dataGridView1.SelectedRows[0].Cells["sysID"].Value.ToString();
@@ -138,17 +153,19 @@ namespace ZBilling.Forms
                 FC.Add("Username");
                 FC.Add("Password");
                 FC.Add("Fullname");
+                //FC.Add("EmailAddress");
                 FC.Add("Role");
                 FC.Add("isActive");
                 FC.Add("AllowAccessUser");
                 List<string> FV = new List<string>();
-                FV.Add(textBox1.Text);
                 FV.Add(textBox2.Text);
+                FV.Add(clsLic.CryptoEngine.Encrypt(textBox1.Text, keys));
                 FV.Add(textBox4.Text);
+                //FV.Add(textBox5.Text);
                 List<string> FI = new List<string>();
                 int UserRole = cf.GetSysID("tblUserRole", " where Role='" + comboBox1.Text + "'");
                 FI.Add(UserRole.ToString());
-                FI.Add(checkBox1.Checked ? "1" : "0");
+                FI.Add((comboBox1.Text.ToLower().Contains("admin") ? "1" : "0"));
                 FI.Add(checkBox2.Checked ? "1" : "0");
                 if (!cf.InsertRecords("tblUsers", FC, FV, FI))
                 {
@@ -176,6 +193,7 @@ namespace ZBilling.Forms
                     dataGridView1.DataSource = dvRecords;
                     dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 }
+                
             }
             catch (Exception ex)
             {
@@ -210,13 +228,62 @@ namespace ZBilling.Forms
             try
             {
                 label8.Text = dataGridView1["sysid", dataGridView1.CurrentCell.RowIndex].Value.ToString();
-                textBox1.Text = dataGridView1["username", dataGridView1.CurrentCell.RowIndex].Value.ToString();
-                textBox2.Text = dataGridView1["password", dataGridView1.CurrentCell.RowIndex].Value.ToString();
+                textBox2.Text = dataGridView1["username", dataGridView1.CurrentCell.RowIndex].Value.ToString();
+
+                if (!UserRole.ToString().Contains("admin"))
+                {
+                    textBox1.PasswordChar = '*';
+                }
+                else
+                {
+                    textBox1.PasswordChar = '\0';
+                }
+                textBox1.Text = clsLic.CryptoEngine.Decrypt(dataGridView1["password", dataGridView1.CurrentCell.RowIndex].Value.ToString(), keys);
                 textBox4.Text = dataGridView1["fullname", dataGridView1.CurrentCell.RowIndex].Value.ToString();
+                textBox5.Text = cf.GetDefaultUserPassword(inif); //dataGridView1["EmailAddress", dataGridView1.CurrentCell.RowIndex].Value.ToString();
+                textBox1.PasswordChar = '*';
             }
             catch
             {
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //if (string.IsNullOrEmpty(textBox5.Text))
+            //{
+            //    MessageBox.Show("Error: Please provide email address.", "No Email Address Define.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    return;
+            //}
+            //if (label8.Text == "0")
+            //{
+            //    MessageBox.Show("Error: Please choose user to retrieve.", "No Username Define.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    return;
+            //}
+            //if (!cf.IsValidEmail(textBox5.Text))
+            //{
+            //    MessageBox.Show("Error: Please check email address.", "Invalid Format", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    return;
+            //}
+            if (label8.Text != "0")
+            {
+                DialogResult dr = MessageBox.Show("Are you sure you want to defaul the password on this user:" + textBox2.Text, "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dr == DialogResult.Yes)
+                {
+                    UpdateRecords(true);
+                    LoadRecords();
+                }
+            }
+        }
+
+        private void textBox1_MouseHover(object sender, EventArgs e)
+        {
+            textBox1.PasswordChar = '\0';
+        }
+
+        private void textBox1_MouseLeave(object sender, EventArgs e)
+        {
+            textBox1.PasswordChar = '*';
         }
 
     }

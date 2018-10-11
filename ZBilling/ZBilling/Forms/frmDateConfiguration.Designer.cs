@@ -47,12 +47,24 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.label8 = new System.Windows.Forms.Label();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.label9 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.label9 = new System.Windows.Forms.Label();
+            this.button2 = new System.Windows.Forms.Button();
+            this.textBox7 = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.textBox9 = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.textBox10 = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.textBox11 = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             tabPage1 = new System.Windows.Forms.TabPage();
             tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -61,6 +73,7 @@
             this.tabPage2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.tabPage4.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabPage1
@@ -234,6 +247,8 @@
             // 
             this.tabControl1.Controls.Add(tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(3, 16);
             this.tabControl1.Name = "tabControl1";
@@ -256,31 +271,15 @@
             this.tabPage2.Text = "Interest Monthly Rate";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // label8
+            // label9
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(16, 16);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(70, 13);
-            this.label8.TabIndex = 0;
-            this.label8.Text = "Default Rate:";
-            // 
-            // textBox7
-            // 
-            this.textBox7.Location = new System.Drawing.Point(91, 11);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(100, 20);
-            this.textBox7.TabIndex = 1;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(206, 8);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Update";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(305, 13);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(13, 13);
+            this.label9.TabIndex = 4;
+            this.label9.Text = "0";
+            this.label9.Visible = false;
             // 
             // groupBox3
             // 
@@ -305,15 +304,149 @@
             this.dataGridView1.Size = new System.Drawing.Size(383, 120);
             this.dataGridView1.TabIndex = 0;
             // 
-            // label9
+            // button2
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(305, 13);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(13, 13);
-            this.label9.TabIndex = 4;
-            this.label9.Text = "0";
-            this.label9.Visible = false;
+            this.button2.Location = new System.Drawing.Point(206, 8);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 2;
+            this.button2.Text = "Update";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // textBox7
+            // 
+            this.textBox7.Location = new System.Drawing.Point(91, 11);
+            this.textBox7.Name = "textBox7";
+            this.textBox7.Size = new System.Drawing.Size(100, 20);
+            this.textBox7.TabIndex = 1;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(16, 16);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(70, 13);
+            this.label8.TabIndex = 0;
+            this.label8.Text = "Default Rate:";
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(401, 182);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Module Assignment";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.button4);
+            this.tabPage4.Controls.Add(this.button3);
+            this.tabPage4.Controls.Add(this.textBox11);
+            this.tabPage4.Controls.Add(this.label13);
+            this.tabPage4.Controls.Add(this.textBox10);
+            this.tabPage4.Controls.Add(this.label12);
+            this.tabPage4.Controls.Add(this.textBox9);
+            this.tabPage4.Controls.Add(this.label11);
+            this.tabPage4.Controls.Add(this.textBox8);
+            this.tabPage4.Controls.Add(this.label10);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(401, 182);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "Email";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // textBox8
+            // 
+            this.textBox8.Location = new System.Drawing.Point(85, 6);
+            this.textBox8.Name = "textBox8";
+            this.textBox8.Size = new System.Drawing.Size(180, 20);
+            this.textBox8.TabIndex = 3;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(3, 11);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(71, 13);
+            this.label10.TabIndex = 2;
+            this.label10.Text = "HOST (smtp):";
+            // 
+            // textBox9
+            // 
+            this.textBox9.Location = new System.Drawing.Point(85, 32);
+            this.textBox9.Name = "textBox9";
+            this.textBox9.Size = new System.Drawing.Size(180, 20);
+            this.textBox9.TabIndex = 5;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(3, 37);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(76, 13);
+            this.label11.TabIndex = 4;
+            this.label11.Text = "Email Address:";
+            // 
+            // textBox10
+            // 
+            this.textBox10.Location = new System.Drawing.Point(85, 58);
+            this.textBox10.Name = "textBox10";
+            this.textBox10.PasswordChar = '*';
+            this.textBox10.Size = new System.Drawing.Size(180, 20);
+            this.textBox10.TabIndex = 7;
+            this.textBox10.MouseHover += new System.EventHandler(this.textBox10_MouseHover);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(3, 63);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(56, 13);
+            this.label12.TabIndex = 6;
+            this.label12.Text = "Password:";
+            // 
+            // textBox11
+            // 
+            this.textBox11.Location = new System.Drawing.Point(85, 84);
+            this.textBox11.Multiline = true;
+            this.textBox11.Name = "textBox11";
+            this.textBox11.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+            this.textBox11.Size = new System.Drawing.Size(310, 64);
+            this.textBox11.TabIndex = 9;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(3, 89);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(80, 13);
+            this.label13.TabIndex = 8;
+            this.label13.Text = "Body Message:";
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(85, 155);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 10;
+            this.button3.Text = "Save";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(166, 155);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.TabIndex = 11;
+            this.button4.Text = "Test";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // frmDateConfiguration
             // 
@@ -335,6 +468,8 @@
             this.tabPage2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -365,5 +500,17 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.TextBox textBox11;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox textBox10;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox textBox9;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox textBox8;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button4;
     }
 }

@@ -21,6 +21,8 @@ namespace ZBilling.Forms
         public MenuStrip MSMainMenu;
         public ToolStrip TSMainMenu;
 
+        string keys = "zbln-3asd-sqoy19";
+
         public frmLogin()
         {
             InitializeComponent();
@@ -43,7 +45,7 @@ namespace ZBilling.Forms
             cf.DbLocation = DBPath;
             if (!string.IsNullOrEmpty(DBPath))
             {
-                if (!cf.ValidateUser(textBox1.Text, textBox2.Text, ref Role))
+                if (!cf.ValidateUser(textBox1.Text, clsLic.CryptoEngine.Encrypt(textBox2.Text,keys), ref Role))
                 {
                     MessageBox.Show("Error: Invalid User. Please check", "User Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;

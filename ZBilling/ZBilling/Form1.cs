@@ -404,7 +404,9 @@ namespace ZBilling
             {
                 frmUsers fu = new frmUsers();
                 fu.MdiParent = this;
+                fu.UserRole = tssUserRole.Text;
                 fu.DBPath = DatabasePath;
+                fu.inif = iniF;
                 fu.Show();
             }
         }
@@ -537,6 +539,7 @@ namespace ZBilling
                 frmDateConfiguration dc = new frmDateConfiguration();
                 dc.MdiParent = this;
                 dc.DBPath = DatabasePath;
+                dc.IniPath = iniF;
                 dc.LoginUser = tssUserlogin.Text;
                 dc.Show();
             }
