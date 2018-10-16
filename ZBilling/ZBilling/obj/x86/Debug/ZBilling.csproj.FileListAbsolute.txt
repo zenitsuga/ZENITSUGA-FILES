@@ -61,3 +61,4 @@ E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\RdlCompile.cache
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\RdlCompile.compiled
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.exe
 E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.pdb
+E:\ZENITSUGA FILES\ZBilling\ZBilling\obj\x86\Debug\ZBilling.Forms.ChangePass.resources

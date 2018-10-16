@@ -319,19 +319,26 @@ namespace ZBilling
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            tmrToday.Enabled = true;
-            int readcounter = 1;
-                    ReadSettings(readcounter);
-                    if (!string.IsNullOrEmpty(IniFileSettings))
-                    {
-                        //ReadIniFile(IniFileSettings);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Error: Check your Application Settings.", "Setting is Invalid", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        readcounter++; ;
+            try
+            {
+                tmrToday.Enabled = true;
+                int readcounter = 1;
+                ReadSettings(readcounter);
+                if (!string.IsNullOrEmpty(IniFileSettings))
+                {
+                    //ReadIniFile(IniFileSettings);
                 }
-                    CheckAndLoadSettings();
+                else
+                {
+                    MessageBox.Show("Error: Check your Application Settings.", "Setting is Invalid", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    readcounter++; ;
+                }
+                CheckAndLoadSettings();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Error:" + ex.Message, "Writing Ini Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private bool CheckAndLoadSettings()
         {
@@ -417,7 +424,9 @@ namespace ZBilling
             {
                 frmUsers fu = new frmUsers();
                 fu.MdiParent = this;
+                fu.UserRole = tssUserRole.Text;
                 fu.DBPath = DatabasePath;
+                fu.inif = iniF;
                 fu.Show();
             }
         }
@@ -566,6 +575,18 @@ namespace ZBilling
                 rc.DBPath = DatabasePath;
                 rc.LoginUser = tssUserlogin.Text;
                 rc.Show();
+            }
+        }
+
+        private void ChangePassword_Click(object sender, EventArgs e)
+        {
+            if (CheckAndLoadSettings())
+            {
+                ChangePass cp = new ChangePass();
+                cp.MdiParent = this;
+                cp.DBPath = DatabasePath;
+                cp.LoginUser = tssUserlogin.Text;
+                cp.Show();
             }
         }
     }
