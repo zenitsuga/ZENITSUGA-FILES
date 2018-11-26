@@ -47,7 +47,14 @@ namespace ZBilling.Forms
                     {
                         textBox4.Text = dtrecords.Rows[0]["BillingCoverDays"].ToString();
                     }
-                    
+                    if (dtrecords.Rows[0]["TransStartDate"] != null)
+                    {
+                        textBox5.Text = dtrecords.Rows[0]["TransStartDate"].ToString();
+                    }
+                    if (dtrecords.Rows[0]["TransEndDate"] != null)
+                    {
+                        textBox6.Text = dtrecords.Rows[0]["TransEndDate"].ToString();
+                    }
                     label5.Text = dtrecords.Rows[0]["sysid"].ToString();
                 }
             }
@@ -119,11 +126,12 @@ namespace ZBilling.Forms
                 DataTable dtrecords = cf.GetRecords(Query);
                 if (dtrecords.Rows.Count > 0)
                 {
-                    SaveQuery = "Update tblsettings set CurrentYear=" + textBox1.Text + ",CurrentMonth=" + textBox2.Text + ",MonthDue=" + textBox3.Text + ",BillingCoverDays=" + textBox4.Text + " where sysid=" + label5.Text;
+                    SaveQuery = "Update tblsettings set CurrentYear=" + textBox1.Text + ",CurrentMonth=" + textBox2.Text + ",MonthDue=" + textBox3.Text + ",BillingCoverDays=" + textBox4.Text + ",TransStartDate=" + textBox5.Text + ",TransEndDate=" +
+                     textBox6.Text + " where sysid=" + label5.Text;
                     cf.ExecuteNonQuery(SaveQuery);
                 }else
                 {
-                    SaveQuery = "Insert into tblsettings (CurrentYear,CurrentMonth,MonthDue,BillingCoverDays)Values(" + textBox1.Text + "," + textBox2.Text + "," + textBox3.Text + "," + textBox4.Text + ")";
+                    SaveQuery = "Insert into tblsettings (CurrentYear,CurrentMonth,MonthDue,BillingCoverDays,TransStartDate,TransEndDate)Values(" + textBox1.Text + "," + textBox2.Text + "," + textBox3.Text + "," + textBox4.Text + "," + textBox5.Text + "," + textBox6.Text + ")";
                     cf.ExecuteNonQuery(SaveQuery);
                 }
 

@@ -86,6 +86,7 @@
             this.label17 = new System.Windows.Forms.Label();
             this.comboBox4 = new System.Windows.Forms.ComboBox();
             this.label16 = new System.Windows.Forms.Label();
+            this.button7 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -104,6 +105,7 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.button7);
             this.groupBox1.Controls.Add(this.button6);
             this.groupBox1.Controls.Add(this.textBox13);
             this.groupBox1.Controls.Add(this.label21);
@@ -689,14 +691,15 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.dataGridView3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView3.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.dataGridView3.Location = new System.Drawing.Point(6, 107);
+            this.dataGridView3.Location = new System.Drawing.Point(6, 74);
             this.dataGridView3.MultiSelect = false;
             this.dataGridView3.Name = "dataGridView3";
             this.dataGridView3.ReadOnly = true;
             this.dataGridView3.RowHeadersWidth = 10;
             this.dataGridView3.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView3.Size = new System.Drawing.Size(188, 306);
+            this.dataGridView3.Size = new System.Drawing.Size(188, 339);
             this.dataGridView3.TabIndex = 4;
+            this.dataGridView3.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView3_CellContentDoubleClick);
             // 
             // comboBox6
             // 
@@ -706,6 +709,7 @@
             this.comboBox6.Name = "comboBox6";
             this.comboBox6.Size = new System.Drawing.Size(108, 21);
             this.comboBox6.TabIndex = 3;
+            this.comboBox6.Visible = false;
             // 
             // label18
             // 
@@ -715,6 +719,7 @@
             this.label18.Size = new System.Drawing.Size(65, 13);
             this.label18.TabIndex = 6;
             this.label18.Text = "Room Type:";
+            this.label18.Visible = false;
             // 
             // comboBox5
             // 
@@ -738,6 +743,7 @@
             this.comboBox5.Name = "comboBox5";
             this.comboBox5.Size = new System.Drawing.Size(141, 21);
             this.comboBox5.TabIndex = 2;
+            this.comboBox5.SelectedValueChanged += new System.EventHandler(this.comboBox5_SelectedValueChanged);
             // 
             // label17
             // 
@@ -766,6 +772,16 @@
             this.label16.Size = new System.Drawing.Size(32, 13);
             this.label16.TabIndex = 3;
             this.label16.Text = "Year:";
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(752, 84);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(75, 23);
+            this.button7.TabIndex = 29;
+            this.button7.Text = "New Record";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // Transactions
             // 
@@ -861,5 +877,6 @@
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.TextBox textBox6;
         private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button button7;
     }
 }

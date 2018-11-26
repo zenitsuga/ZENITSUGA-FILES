@@ -241,7 +241,15 @@ namespace ZBilling.Forms
                 {
                     isValidDueDate = true;   
                 }
-                
+                comboBox4.Items.Clear();
+                string StartDate = cf.GetRecordValue("TransStartDate", "tblSettings", "1");
+                string EndDate = cf.GetRecordValue("TransEndDate", "tblSettings", "1");
+                int startYear = string.IsNullOrEmpty(StartDate) ? 2015:int.Parse(cf.isIntegerValid(StartDate) ? StartDate:"2015");
+                int endYear = string.IsNullOrEmpty(EndDate) ? DateTime.Now.Year : int.Parse(cf.isIntegerValid(EndDate) ? EndDate : DateTime.Now.Year.ToString());
+                for (int cnt = startYear; cnt <= endYear; cnt++)
+                {
+                    comboBox4.Items.Add(cnt.ToString());
+                }
             }
             catch
             {
@@ -1002,10 +1010,95 @@ namespace ZBilling.Forms
         private void comboBox4_SelectedValueChanged(object sender, EventArgs e)
         {
             DateTime dtParseStart = DateTime.Parse(comboBox4.Text + "/01/01");
-            DateTime dtParseEnd = DateTime.Parse(comboBox4.Text + "/12/31");
-            dvTrans.RowFilter = " DueDate > #" + dtParseStart.ToString("MM/dd/yyyy") + "# and DueDate < #" + dtParseEnd.ToString("MM/dd/yyyy") + "#" ;
-            dataGridView3.DataSource = dvTrans.ToTable();
-            dataGridView3.Columns["DueDate"].Visible = false;
+            DateTime dtParseEnd = DateTime.Parse(comboBox4.Text + "/12/30");
+
+            string Query = "select TransactionNo,RoomID,DueDate from tblTransaction where dateTransaction between '" + comboBox4.Text + 
+                           "/01/01'" + " and '" + comboBox4.Text + "/12/30" + "' and isActive = 1";
+
+            dvTrans = cf.GetRecords(Query).DefaultView;
+
+            if (dvTrans != null)
+            {
+            
+                dvTrans.RowFilter = " DueDate > #" + dtParseStart.ToString("MM/dd/yyyy") + "# and DueDate < #" + dtParseEnd.ToString("MM/dd/yyyy") + "#";
+                dataGridView3.DataSource = dvTrans.ToTable();
+                dataGridView3.Columns["DueDate"].Visible = false;
+            }
+        }
+
+        private void GetPrevRecordViaTransNo(string TransNo)
+        {
+            try
+            {
+                string Query = "select t.CustomerID,t.TenantID,t.RoomID,t.OpeningBalance,t.OutStandingBalance,t.DueDate, " + 
+                               "case when t.CustomerID > 0 then " + 
+                               " isnull(ct.lastname,'') + ',' + isnull(ct.Firstname,'') " +  
+                               " else " +
+                               " isnull(tt.lastname,'') + ',' + isnull(tt.firstname,'') " +
+                               " end as 'Name' " +
+                               " from tblTransaction t left join tblTenant tt on t.tenantID = tt.sysid " +
+                               " left join tblCustomerTenant ct on t.CustomerID = ct.sysid " +
+                               " where t.TransactionNo = '" + TransNo +"' and t.isActive = 1";
+                DataTable dtresult = cf.GetRecords(Query);
+                textBox2.Text = textBox8.Text = string.Empty;
+                if (dtresult.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dtresult.Rows)
+                    {
+                        label11.Text = dr["CustomerID"].ToString();
+                        label12.Text = dr["TenantID"].ToString();
+                        textBox2.Text = label11.Text != "-1" ? dr["Name"].ToString():string.Empty;
+                        textBox8.Text = textBox2.Text == "" ? dr["Name"].ToString() : string.Empty;
+                        textBox5.Text = cf.FixMoneyValue(dr["OpeningBalance"].ToString());
+                        textBox6.Text = cf.FixMoneyValue(dr["OutStandingBalance"].ToString());
+                        textBox13.Text = cf.isDateValid(dr["DueDate"].ToString()) ? DateTime.Parse(dr["DueDate"].ToString()).ToString("yyyy-MM-dd"):string.Empty;
+                        customerType = label11.Text != "-1" ? "Owner" : "Tenant";
+                        LoadRoom();
+                       
+                    }
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        private void dataGridView3_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                string TransNo = dataGridView3[0, dataGridView3.CurrentCell.RowIndex].Value.ToString(); 
+                textBox1.Text = TransNo;
+                GetPrevRecordViaTransNo(TransNo);
+            }
+            catch
+            {
+            }
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = MessageBox.Show("Are you sure you want to create a new transaction? Current record will be lost.", "Create New Transaction", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (dr == DialogResult.Yes)
+            {
+                isValidDueDate = false;
+                loadNewTrans(ref isValidDueDate);
+            }
+        }
+
+        private void comboBox5_SelectedValueChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                DateTime dtParseStart = DateTime.Parse(comboBox4.Text + "/01/01");
+                DateTime dtParseEnd = DateTime.Parse(comboBox4.Text + "/12/31");
+                dvTrans.RowFilter = " DueDate > #" + dtParseStart.ToString("MM/dd/yyyy") + "# and DueDate < #" + dtParseEnd.ToString("MM/dd/yyyy") + "# " + (string.IsNullOrEmpty(comboBox5.Text) ? string.Empty: "and TransactionNo like '" + comboBox5.Text.Substring(0, 3) + "%'");
+                dataGridView3.DataSource = dvTrans.ToTable();
+                dataGridView3.Columns["DueDate"].Visible = false;
+            }
+            catch
+            {
+            }
         }
     }
 }

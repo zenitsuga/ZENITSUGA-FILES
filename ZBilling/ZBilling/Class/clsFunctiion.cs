@@ -225,6 +225,18 @@ namespace ZBilling.Class
             }
             return result;
         }
+        public string FixMoneyValue(string moneyVal)
+        {
+            string result = string.Format("{0:C}", moneyVal).Replace("$", "");
+            try
+            {
+                result = string.Format("{0:C}", moneyVal).Replace("$", "");
+            }
+            catch
+            {
+            }
+            return result;
+        }
         public void PreviousRoomDisable(string RoomName)
         {
             try
@@ -552,11 +564,11 @@ namespace ZBilling.Class
             bool result = false;
             try
             {
-                string Query = "Insert into tblTransaction(TransactionNo,Description,DateTransaction,CustomerID,RoomID,OpeningBalance,OutstandingBalance,userID,DueDate) values ('" + TransactionNo + "','Transaction Code: "+ TransactionNo +"','"+ DateTrans +"'," + CustomerID + ","+ RoomID + "," + OpeningBal + "," + OutstandingBal + "," + UserID + ",'"+ DueDate  +"')" ;
+                string Query = "Insert into tblTransaction(TransactionNo,Description,DateTransaction,CustomerID,RoomID,OpeningBalance,OutstandingBalance,userID,DueDate) values ('" + TransactionNo + "','Transaction Code: "+ TransactionNo +"','"+ DateTrans +"'," + CustomerID + ","+ RoomID + "," + OpeningBal.Replace(",","") + "," + OutstandingBal.Replace(",","") + "," + UserID + ",'"+ DueDate  +"')" ;
 
                 if (!string.IsNullOrEmpty(CustomerType))
                 {
-                    Query = "Insert into tblTransaction(TransactionNo,Description,DateTransaction,tenantID,RoomID,OpeningBalance,OutstandingBalance,userID,DueDate) values ('" + TransactionNo + "','Transaction Code: " + TransactionNo + "','" + DateTrans + "'," + CustomerID + "," + RoomID + "," + OpeningBal + "," + OutstandingBal + "," + UserID + ",'" + DueDate + "')";
+                    Query = "Insert into tblTransaction(TransactionNo,Description,DateTransaction,tenantID,RoomID,OpeningBalance,OutstandingBalance,userID,DueDate) values ('" + TransactionNo + "','Transaction Code: " + TransactionNo + "','" + DateTrans + "'," + CustomerID + "," + RoomID + "," + OpeningBal.Replace(",","") + "," + OutstandingBal.Replace(",","") + "," + UserID + ",'" + DueDate + "')";
                 }
 
                 result = ExecuteNonQuery(Query);

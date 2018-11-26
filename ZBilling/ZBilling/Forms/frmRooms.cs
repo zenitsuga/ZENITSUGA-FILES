@@ -90,7 +90,7 @@ namespace ZBilling.Forms
                 int UID = cf.GetSysID("tblUsers"," where Username = '"+ LoginUser +"'");
                 int isActive = checkBox1.Checked ? 1:0;
                 ComputeMonthlyDue();
-                string Query = "Insert into tblRooms(RoomType,RoomName,UserID,Description,SizeSQM,isActive,MonthlyDue)values('" + comboBox1.Text + "','" + textBox1.Text +"'," + UID + ",'" + textBox2.Text +"','" + textBox3.Text + "',"+ isActive + ","+ textBox5.Text.Replace(",","") +")";
+                string Query = "Insert into tblRooms(RoomType,RoomName,UserID,Description,SizeSQM,isActive,PricePerSQM,MonthlyDue)values('" + comboBox1.Text + "','" + textBox1.Text + "'," + UID + ",'" + textBox2.Text + "','" + textBox3.Text + "'," + isActive + "," + textBox4.Text.Replace(",", "") + "," + textBox5.Text.Replace(",", "") + ")";
                 
                 if (cf.ExecuteNonQuery(Query))
                 {
